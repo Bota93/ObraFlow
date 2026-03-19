@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/ObraFlow.Api/ObraFlow.Api.csproj" />
+    <Project Path="src/ObraFlow.Application/ObraFlow.Application.csproj" />
+    <Project Path="src/ObraFlow.Domain/ObraFlow.Domain.csproj" />
+    <Project Path="src/ObraFlow.Infrastructure/ObraFlow.Infrastructure.csproj" />
+  </Folder>
+</Solution>
