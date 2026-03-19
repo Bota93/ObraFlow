@@ -2,21 +2,20 @@
 **/bin/
 **/obj/
 
-# User-specific files
+# IDE / editor
 .vs/
-.idea/
 .vscode/
+.idea/
+
+# Temp files
+.tmp/
+*.tmp
+*.log
 
 # OS files
 .DS_Store
 Thumbs.db
 
-# Environment / secrets
+# Environment
 .env
 .env.*
-
-# Docker
-docker-data/
-
-# Logs
-*.log
