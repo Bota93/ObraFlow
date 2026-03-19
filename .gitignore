@@ -1,0 +1,29 @@
+# Build artifacts
+**/bin/
+**/obj/
+TestResults/
+**/TestResults/
+coverage/
+**/coverage/
+*.coverage
+*.coveragexml
+
+# IDE / editor
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+
+# Temp files
+.tmp/
+*.tmp
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.*

@@ -1,0 +1,31 @@
+services:
+  db:
+    image: postgres:16
+    container_name: obraflow-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: obraflowdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - obraflow_postgres_data:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: .
+      dockerfile: src/ObraFlow.Api/Dockerfile
+    container_name: obraflow-api
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__DefaultConnection: Host=db;Port=5432;Database=obraflowdb;Username=postgres;Password=postgres
+    ports:
+      - "5000:8080"
+
+volumes:
+  obraflow_postgres_data:
