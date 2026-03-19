@@ -1,0 +1,23 @@
+using System.ComponentModel.DataAnnotations;
+
+namespace ObraFlow.Application.DTOs.Workers;
+
+public class UpdateWorkerDto
+{
+    [Required]
+    [StringLength(140, MinimumLength = 3)]
+    public string Name { get; set; } = string.Empty;
+
+    [Required]
+    [StringLength(80, MinimumLength = 2)]
+    public string Role { get; set; } = string.Empty;
+
+    [Required]
+    [StringLength(30, MinimumLength = 7)]
+    public string PhoneNumber { get; set; } = string.Empty;
+
+    [Range(typeof(decimal), "0.01", "999999.99")]
+    public decimal HourlyRate { get; set; }
+
+    public bool IsActive { get; set; }
+}
