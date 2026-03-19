@@ -1,0 +1,22 @@
+# Build artifacts
+**/bin/
+**/obj/
+
+# User-specific files
+.vs/
+.idea/
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment / secrets
+.env
+.env.*
+
+# Docker
+docker-data/
+
+# Logs
+*.log
