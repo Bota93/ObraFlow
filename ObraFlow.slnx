@@ -5,4 +5,7 @@
     <Project Path="src/ObraFlow.Domain/ObraFlow.Domain.csproj" />
     <Project Path="src/ObraFlow.Infrastructure/ObraFlow.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/ObraFlow.Api.IntegrationTests/ObraFlow.Api.IntegrationTests.csproj" />
+  </Folder>
 </Solution>
