@@ -16,7 +16,7 @@ public class UpdateWorkerDto
     [StringLength(30, MinimumLength = 7)]
     public string PhoneNumber { get; set; } = string.Empty;
 
-    [Range(typeof(decimal), "0.01", "999999.99")]
+    [Range(typeof(decimal), "0.01", "999999.99", ParseLimitsInInvariantCulture = true, ConvertValueInInvariantCulture = true)]
     public decimal HourlyRate { get; set; }
 
     public bool IsActive { get; set; }
