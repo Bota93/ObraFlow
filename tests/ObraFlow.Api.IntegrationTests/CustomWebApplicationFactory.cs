@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using ObraFlow.Infrastructure.Persistence;
@@ -25,17 +26,9 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 
         builder.ConfigureServices(services =>
         {
-            var dbContextDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<AppDbContext>));
-            if (dbContextDescriptor is not null)
-            {
-                services.Remove(dbContextDescriptor);
-            }
-
-            var connectionDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbConnection));
-            if (connectionDescriptor is not null)
-            {
-                services.Remove(connectionDescriptor);
-            }
+            services.RemoveAll<DbContextOptions<AppDbContext>>();
+            services.RemoveAll<AppDbContext>();
+            services.RemoveAll<DbConnection>();
 
             services.AddSingleton<DbConnection>(_ =>
             {
@@ -44,9 +37,13 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
                 return _connection;
             });
 
-            services.AddDbContext<AppDbContext>((serviceProvider, options) =>
+            services.AddScoped<AppDbContext>(serviceProvider =>
             {
-                options.UseSqlite(serviceProvider.GetRequiredService<DbConnection>());
+                var options = new DbContextOptionsBuilder<AppDbContext>()
+                    .UseSqlite(serviceProvider.GetRequiredService<DbConnection>())
+                    .Options;
+
+                return new AppDbContext(options);
             });
         });
     }

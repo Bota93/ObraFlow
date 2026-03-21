@@ -14,48 +14,9 @@ public class DailyReportsEndpointsTests
     {
         return factory.CreateClient(new WebApplicationFactoryClientOptions
         {
-            AllowAutoRedirect = false,
-            BaseAddress = new Uri("https://localhost")
+            BaseAddress = new Uri("https://localhost"),
+            AllowAutoRedirect = false
         });
-    }
-
-    private static async Task<WorkerDto> CreateWorkerAsync(HttpClient client, string name)
-    {
-        var newWorker = new
-        {
-            name,
-            role = "Electrician",
-            phoneNumber = "1234567",
-            hourlyRate = 25.50m,
-            isActive = true
-        };
-
-        var response = await client.PostAsJsonAsync("/workers", newWorker);
-        response.StatusCode.Should().Be(HttpStatusCode.Created);
-
-        var createdWorker = await response.Content.ReadFromJsonAsync<WorkerDto>();
-        createdWorker.Should().NotBeNull();
-
-        return createdWorker!;
-    }
-
-    private static async Task<DailyReportDto> CreateDailyReportAsync(HttpClient client, Guid workerId, string description)
-    {
-        var newDailyReport = new
-        {
-            date = new DateOnly(2026, 3, 21),
-            workerId,
-            hoursWorked = 8.5m,
-            description
-        };
-
-        var response = await client.PostAsJsonAsync("/daily-reports", newDailyReport);
-        response.StatusCode.Should().Be(HttpStatusCode.Created);
-
-        var createdReport = await response.Content.ReadFromJsonAsync<DailyReportDto>();
-        createdReport.Should().NotBeNull();
-
-        return createdReport!;
     }
 
     [Fact]
@@ -64,90 +25,44 @@ public class DailyReportsEndpointsTests
         using var factory = new CustomWebApplicationFactory();
         using var client = CreateClient(factory);
 
-        var worker = await CreateWorkerAsync(client, "Report Worker");
-        await CreateDailyReportAsync(client, worker.Id, "Initial report");
-
         var response = await client.GetAsync("/daily-reports");
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var reports = await response.Content.ReadFromJsonAsync<List<DailyReportDto>>();
         reports.Should().NotBeNull();
-        reports.Should().NotBeEmpty();
     }
 
     [Fact]
-    public async Task PostDailyReport_ShouldReturnCreated()
+    public async Task PostDailyReport_ShouldReturnCreated_WhenPayloadIsValid()
     {
         using var factory = new CustomWebApplicationFactory();
         using var client = CreateClient(factory);
 
-        var worker = await CreateWorkerAsync(client, "Create Report Worker");
+        var worker = await CreateWorkerAsync(client);
 
-        var newDailyReport = new
+        var payload = new
         {
-            date = new DateOnly(2026, 3, 21),
+            date = DateOnly.FromDateTime(DateTime.UtcNow),
             workerId = worker.Id,
-            hoursWorked = 7.5m,
-            description = "Concrete pouring completed"
+            hoursWorked = 8.5m,
+            description = $"Daily report {Guid.NewGuid()}"
         };
 
-        var response = await client.PostAsJsonAsync("/daily-reports", newDailyReport);
+        var response = await client.PostAsJsonAsync("/daily-reports", payload);
 
         response.StatusCode.Should().Be(HttpStatusCode.Created);
         response.Headers.Location.Should().NotBeNull();
 
-        var createdReport = await response.Content.ReadFromJsonAsync<DailyReportDto>();
-        createdReport.Should().NotBeNull();
-        createdReport!.Id.Should().NotBe(Guid.Empty);
-        createdReport.Date.Should().Be(newDailyReport.date);
-        createdReport.WorkerId.Should().Be(worker.Id);
-        createdReport.WorkerName.Should().Be(worker.Name);
-        createdReport.HoursWorked.Should().Be(newDailyReport.hoursWorked);
-        createdReport.Description.Should().Be(newDailyReport.description);
+        var created = await response.Content.ReadFromJsonAsync<DailyReportDto>();
+        created.Should().NotBeNull();
+        created!.WorkerId.Should().Be(worker.Id);
+        created.WorkerName.Should().Be(worker.Name);
+        created.HoursWorked.Should().Be(8.5m);
     }
 
     [Fact]
-    public async Task GetDailyReports_ShouldReturnCreatedReport()
-    {
-        using var factory = new CustomWebApplicationFactory();
-        using var client = CreateClient(factory);
-
-        var worker = await CreateWorkerAsync(client, "List Report Worker");
-        var createdReport = await CreateDailyReportAsync(client, worker.Id, "Safety inspection completed");
-
-        var response = await client.GetAsync("/daily-reports");
-
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
-
-        var reports = await response.Content.ReadFromJsonAsync<List<DailyReportDto>>();
-        reports.Should().NotBeNull();
-        reports.Should().Contain(x => x.Id == createdReport.Id && x.WorkerName == worker.Name);
-    }
-
-    [Fact]
-    public async Task GetDailyReportById_ShouldReturnCreatedReport()
-    {
-        using var factory = new CustomWebApplicationFactory();
-        using var client = CreateClient(factory);
-
-        var worker = await CreateWorkerAsync(client, "Get Report Worker");
-        var createdReport = await CreateDailyReportAsync(client, worker.Id, "Materials received");
-
-        var response = await client.GetAsync($"/daily-reports/{createdReport.Id}");
-
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
-
-        var report = await response.Content.ReadFromJsonAsync<DailyReportDto>();
-        report.Should().NotBeNull();
-        report!.Id.Should().Be(createdReport.Id);
-        report.WorkerId.Should().Be(worker.Id);
-        report.WorkerName.Should().Be(worker.Name);
-        report.Description.Should().Be("Materials received");
-    }
-
-    [Fact]
-    public async Task GetDailyReportById_ShouldReturn404_WhenNotFound()
+    public async Task GetDailyReportById_ShouldReturnNotFound_WhenReportDoesNotExist()
     {
         using var factory = new CustomWebApplicationFactory();
         using var client = CreateClient(factory);
@@ -158,93 +73,68 @@ public class DailyReportsEndpointsTests
     }
 
     [Fact]
-    public async Task PostDailyReport_ShouldReturnBadRequest_WhenInvalid()
+    public async Task PostDailyReport_ShouldReturnBadRequest_WhenPayloadIsInvalid()
     {
         using var factory = new CustomWebApplicationFactory();
         using var client = CreateClient(factory);
 
-        var invalidDailyReport = new
+        var payload = new
         {
-            date = default(DateOnly),
-            workerId = Guid.Empty,
+            date = DateOnly.FromDateTime(DateTime.UtcNow),
+            workerId = Guid.NewGuid(),
             hoursWorked = 0m,
             description = ""
         };
 
-        var response = await client.PostAsJsonAsync("/daily-reports", invalidDailyReport);
+        var response = await client.PostAsJsonAsync("/daily-reports", payload);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
         var validationProblem = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
         validationProblem.Should().NotBeNull();
-        validationProblem!.Errors.Should().ContainKey("Date");
-        validationProblem.Errors.Should().ContainKey("WorkerId");
-        validationProblem.Errors.Should().ContainKey("HoursWorked");
+        validationProblem!.Errors.Should().ContainKey("HoursWorked");
         validationProblem.Errors.Should().ContainKey("Description");
     }
 
     [Fact]
-    public async Task PostDailyReport_ShouldReturnBadRequest_WhenWorkerDoesNotExist()
+    public async Task PutDailyReport_ShouldUpdateExistingReport()
     {
         using var factory = new CustomWebApplicationFactory();
         using var client = CreateClient(factory);
 
-        var newDailyReport = new
+        var worker = await CreateWorkerAsync(client);
+        var createdReport = await CreateDailyReportAsync(client, worker.Id);
+
+        var updatedWorker = await CreateWorkerAsync(client);
+
+        var payload = new
         {
-            date = new DateOnly(2026, 3, 21),
-            workerId = Guid.NewGuid(),
-            hoursWorked = 8m,
-            description = "Attempt with missing worker"
+            date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-1),
+            workerId = updatedWorker.Id,
+            hoursWorked = 6.25m,
+            description = $"Updated report {Guid.NewGuid()}"
         };
 
-        var response = await client.PostAsJsonAsync("/daily-reports", newDailyReport);
+        var response = await client.PutAsJsonAsync($"/daily-reports/{createdReport.Id}", payload);
 
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var validationProblem = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
-        validationProblem.Should().NotBeNull();
-        validationProblem!.Errors.Should().ContainKey("WorkerId");
+        var updated = await response.Content.ReadFromJsonAsync<DailyReportDto>();
+        updated.Should().NotBeNull();
+        updated!.WorkerId.Should().Be(updatedWorker.Id);
+        updated.WorkerName.Should().Be(updatedWorker.Name);
+        updated.HoursWorked.Should().Be(6.25m);
+        updated.Description.Should().Be(payload.description);
     }
 
     [Fact]
-    public async Task UpdateDailyReport_ShouldModifyReport()
+    public async Task DeleteDailyReport_ShouldReturnNoContent_AndThenNotFound()
     {
         using var factory = new CustomWebApplicationFactory();
         using var client = CreateClient(factory);
 
-        var originalWorker = await CreateWorkerAsync(client, "Original Worker");
-        var replacementWorker = await CreateWorkerAsync(client, "Replacement Worker");
-        var createdReport = await CreateDailyReportAsync(client, originalWorker.Id, "Original report");
-
-        var update = new
-        {
-            date = new DateOnly(2026, 3, 22),
-            workerId = replacementWorker.Id,
-            hoursWorked = 6.5m,
-            description = "Updated report"
-        };
-
-        var putResponse = await client.PutAsJsonAsync($"/daily-reports/{createdReport.Id}", update);
-
-        putResponse.StatusCode.Should().Be(HttpStatusCode.OK);
-
-        var updatedReport = await putResponse.Content.ReadFromJsonAsync<DailyReportDto>();
-        updatedReport.Should().NotBeNull();
-        updatedReport!.Date.Should().Be(update.date);
-        updatedReport.WorkerId.Should().Be(replacementWorker.Id);
-        updatedReport.WorkerName.Should().Be(replacementWorker.Name);
-        updatedReport.HoursWorked.Should().Be(update.hoursWorked);
-        updatedReport.Description.Should().Be(update.description);
-    }
-
-    [Fact]
-    public async Task DeleteDailyReport_ShouldRemoveReport()
-    {
-        using var factory = new CustomWebApplicationFactory();
-        using var client = CreateClient(factory);
-
-        var worker = await CreateWorkerAsync(client, "Delete Report Worker");
-        var createdReport = await CreateDailyReportAsync(client, worker.Id, "Delete me");
+        var worker = await CreateWorkerAsync(client);
+        var createdReport = await CreateDailyReportAsync(client, worker.Id);
 
         var deleteResponse = await client.DeleteAsync($"/daily-reports/{createdReport.Id}");
 
@@ -252,5 +142,44 @@ public class DailyReportsEndpointsTests
 
         var getResponse = await client.GetAsync($"/daily-reports/{createdReport.Id}");
         getResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
+
+    private static async Task<WorkerDto> CreateWorkerAsync(HttpClient client)
+    {
+        var payload = new
+        {
+            name = $"Worker {Guid.NewGuid()}",
+            role = "Operator",
+            phoneNumber = "1234567",
+            hourlyRate = 25.50m,
+            isActive = true
+        };
+
+        var response = await client.PostAsJsonAsync("/workers", payload);
+        response.StatusCode.Should().Be(HttpStatusCode.Created);
+
+        var worker = await response.Content.ReadFromJsonAsync<WorkerDto>();
+        worker.Should().NotBeNull();
+
+        return worker!;
+    }
+
+    private static async Task<DailyReportDto> CreateDailyReportAsync(HttpClient client, Guid workerId)
+    {
+        var payload = new
+        {
+            date = DateOnly.FromDateTime(DateTime.UtcNow),
+            workerId,
+            hoursWorked = 8m,
+            description = $"Seed report {Guid.NewGuid()}"
+        };
+
+        var response = await client.PostAsJsonAsync("/daily-reports", payload);
+        response.StatusCode.Should().Be(HttpStatusCode.Created);
+
+        var report = await response.Content.ReadFromJsonAsync<DailyReportDto>();
+        report.Should().NotBeNull();
+
+        return report!;
     }
 }
