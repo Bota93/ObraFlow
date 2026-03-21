@@ -1,3 +1,4 @@
+using ObraFlow.Infrastructure.Persistence.Seed;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ObraFlow.Domain.Entities;
@@ -22,5 +23,7 @@ public class DailyReportConfiguration : IEntityTypeConfiguration<DailyReport>
         builder.Property(x => x.Description)
             .HasMaxLength(500)
             .IsRequired();
+
+        builder.HasData(DailyReportSeed.Data);
     }
 }

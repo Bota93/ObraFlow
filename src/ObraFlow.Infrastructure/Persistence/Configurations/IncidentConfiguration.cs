@@ -1,3 +1,4 @@
+using ObraFlow.Infrastructure.Persistence.Seed;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ObraFlow.Domain.Entities;
@@ -25,5 +26,7 @@ public class IncidentConfiguration : IEntityTypeConfiguration<Incident>
 
         builder.Property(x => x.ReportedAtUtc)
             .IsRequired();
+
+        builder.HasData(IncidentSeed.Data);
     }
 }

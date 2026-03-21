@@ -48,6 +48,104 @@ namespace ObraFlow.Infrastructure.Persistence.Migrations
                     b.HasIndex("WorkerId");
 
                     b.ToTable("dailyReports", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("2d61957a-7095-4bd7-bf22-0f6ee4d68001"),
+                            Date = new DateOnly(2026, 3, 21),
+                            Description = "Coordinated subcontractors and reviewed progress in the structural zone.",
+                            HoursWorked = 8.00m,
+                            WorkerId = new Guid("6d4c130b-d3ec-4da3-a7c3-f8ff5df74f01")
+                        },
+                        new
+                        {
+                            Id = new Guid("2d61957a-7095-4bd7-bf22-0f6ee4d68002"),
+                            Date = new DateOnly(2026, 3, 21),
+                            Description = "Excavation support and machinery checks completed near the north access.",
+                            HoursWorked = 7.50m,
+                            WorkerId = new Guid("9a9d3e2e-bf2e-4aa7-a714-bdd4db98a102")
+                        },
+                        new
+                        {
+                            Id = new Guid("2d61957a-7095-4bd7-bf22-0f6ee4d68003"),
+                            Date = new DateOnly(2026, 3, 20),
+                            Description = "Performed safety inspection and updated risk signage after equipment movement.",
+                            HoursWorked = 8.00m,
+                            WorkerId = new Guid("45df4f81-bd59-46b0-9df5-baa8543dca03")
+                        },
+                        new
+                        {
+                            Id = new Guid("2d61957a-7095-4bd7-bf22-0f6ee4d68004"),
+                            Date = new DateOnly(2026, 3, 20),
+                            Description = "Reviewed concrete pour schedule and approved reinforcement adjustments.",
+                            HoursWorked = 8.25m,
+                            WorkerId = new Guid("2f99d8d5-2f8b-4d24-9781-1f1f7ad7d104")
+                        },
+                        new
+                        {
+                            Id = new Guid("2d61957a-7095-4bd7-bf22-0f6ee4d68005"),
+                            Date = new DateOnly(2026, 3, 19),
+                            Description = "Supervised framing crew and reorganized the sequencing for facade preparation.",
+                            HoursWorked = 9.00m,
+                            WorkerId = new Guid("dbf81307-b91f-49f1-8ab5-46cd7b7ed105")
+                        },
+                        new
+                        {
+                            Id = new Guid("2d61957a-7095-4bd7-bf22-0f6ee4d68006"),
+                            Date = new DateOnly(2026, 3, 19),
+                            Description = "Managed inbound material delivery and updated inventory for steel anchors.",
+                            HoursWorked = 7.75m,
+                            WorkerId = new Guid("f44da1bc-441f-4de3-b2f4-a9798db17a06")
+                        },
+                        new
+                        {
+                            Id = new Guid("2d61957a-7095-4bd7-bf22-0f6ee4d68007"),
+                            Date = new DateOnly(2026, 3, 18),
+                            Description = "Morning coordination meeting and afternoon follow-up on concrete curing status.",
+                            HoursWorked = 8.50m,
+                            WorkerId = new Guid("6d4c130b-d3ec-4da3-a7c3-f8ff5df74f01")
+                        },
+                        new
+                        {
+                            Id = new Guid("2d61957a-7095-4bd7-bf22-0f6ee4d68008"),
+                            Date = new DateOnly(2026, 3, 18),
+                            Description = "Earthmoving tasks completed for temporary drainage channel on the east side.",
+                            HoursWorked = 8.00m,
+                            WorkerId = new Guid("9a9d3e2e-bf2e-4aa7-a714-bdd4db98a102")
+                        },
+                        new
+                        {
+                            Id = new Guid("2d61957a-7095-4bd7-bf22-0f6ee4d68009"),
+                            Date = new DateOnly(2026, 3, 17),
+                            Description = "Closed safety observations from the week and briefed crew leaders on access control.",
+                            HoursWorked = 7.00m,
+                            WorkerId = new Guid("45df4f81-bd59-46b0-9df5-baa8543dca03")
+                        },
+                        new
+                        {
+                            Id = new Guid("2d61957a-7095-4bd7-bf22-0f6ee4d68010"),
+                            Date = new DateOnly(2026, 3, 17),
+                            Description = "Updated technical drawings and checked slab opening dimensions with the field team.",
+                            HoursWorked = 8.00m,
+                            WorkerId = new Guid("2f99d8d5-2f8b-4d24-9781-1f1f7ad7d104")
+                        },
+                        new
+                        {
+                            Id = new Guid("2d61957a-7095-4bd7-bf22-0f6ee4d68011"),
+                            Date = new DateOnly(2026, 3, 16),
+                            Description = "Led brickwork coordination and resolved sequencing conflict with electrical conduits.",
+                            HoursWorked = 8.75m,
+                            WorkerId = new Guid("dbf81307-b91f-49f1-8ab5-46cd7b7ed105")
+                        },
+                        new
+                        {
+                            Id = new Guid("2d61957a-7095-4bd7-bf22-0f6ee4d68012"),
+                            Date = new DateOnly(2026, 3, 15),
+                            Description = "Processed urgent supplier replacement and reorganized protected storage area.",
+                            HoursWorked = 6.50m,
+                            WorkerId = new Guid("f44da1bc-441f-4de3-b2f4-a9798db17a06")
+                        });
                 });
 
             modelBuilder.Entity("ObraFlow.Domain.Entities.Incident", b =>
@@ -75,6 +173,56 @@ namespace ObraFlow.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("incidents", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("778f5d0e-f8d8-4b70-a203-9161c8a89001"),
+                            Description = "Water accumulation was detected near the service corridor after overnight rain.",
+                            ReportedAtUtc = new DateTime(2026, 3, 21, 7, 45, 0, DateTimeKind.Utc),
+                            Status = 1,
+                            Title = "Water ingress in basement corridor"
+                        },
+                        new
+                        {
+                            Id = new Guid("778f5d0e-f8d8-4b70-a203-9161c8a89002"),
+                            Description = "The access gate on the west scaffold bay requires replacement before next shift.",
+                            ReportedAtUtc = new DateTime(2026, 3, 20, 9, 20, 0, DateTimeKind.Utc),
+                            Status = 2,
+                            Title = "Scaffold access gate damaged"
+                        },
+                        new
+                        {
+                            Id = new Guid("778f5d0e-f8d8-4b70-a203-9161c8a89003"),
+                            Description = "Morning concrete pour was delayed due to a blocked supplier route and was rescheduled.",
+                            ReportedAtUtc = new DateTime(2026, 3, 19, 6, 50, 0, DateTimeKind.Utc),
+                            Status = 3,
+                            Title = "Concrete delivery delay"
+                        },
+                        new
+                        {
+                            Id = new Guid("778f5d0e-f8d8-4b70-a203-9161c8a89004"),
+                            Description = "Several replacement helmets and gloves are pending for the finishing subcontractor.",
+                            ReportedAtUtc = new DateTime(2026, 3, 18, 12, 15, 0, DateTimeKind.Utc),
+                            Status = 2,
+                            Title = "PPE shortage in finishing crew"
+                        },
+                        new
+                        {
+                            Id = new Guid("778f5d0e-f8d8-4b70-a203-9161c8a89005"),
+                            Description = "Temporary lighting failed in the protected storage area, reducing visibility for late shifts.",
+                            ReportedAtUtc = new DateTime(2026, 3, 17, 17, 30, 0, DateTimeKind.Utc),
+                            Status = 1,
+                            Title = "Lighting failure in storage area"
+                        },
+                        new
+                        {
+                            Id = new Guid("778f5d0e-f8d8-4b70-a203-9161c8a89006"),
+                            Description = "A forklift touched the temporary barriers at low speed, with no injuries reported.",
+                            ReportedAtUtc = new DateTime(2026, 3, 16, 10, 5, 0, DateTimeKind.Utc),
+                            Status = 3,
+                            Title = "Minor forklift collision with barriers"
+                        });
                 });
 
             modelBuilder.Entity("ObraFlow.Domain.Entities.Material", b =>
@@ -167,6 +315,46 @@ namespace ObraFlow.Infrastructure.Persistence.Migrations
                             Name = "Carlos Ramirez",
                             PhoneNumber = "+34 600 555 666",
                             Role = "Safety Technician"
+                        },
+                        new
+                        {
+                            Id = new Guid("2f99d8d5-2f8b-4d24-9781-1f1f7ad7d104"),
+                            CreatedAtUtc = new DateTime(2026, 3, 4, 8, 0, 0, DateTimeKind.Utc),
+                            HourlyRate = 31.90m,
+                            IsActive = true,
+                            Name = "Sofia Navarro",
+                            PhoneNumber = "+34 600 777 888",
+                            Role = "Project Engineer"
+                        },
+                        new
+                        {
+                            Id = new Guid("dbf81307-b91f-49f1-8ab5-46cd7b7ed105"),
+                            CreatedAtUtc = new DateTime(2026, 3, 5, 8, 0, 0, DateTimeKind.Utc),
+                            HourlyRate = 29.80m,
+                            IsActive = true,
+                            Name = "Diego Perez",
+                            PhoneNumber = "+34 600 999 000",
+                            Role = "Foreman"
+                        },
+                        new
+                        {
+                            Id = new Guid("f44da1bc-441f-4de3-b2f4-a9798db17a06"),
+                            CreatedAtUtc = new DateTime(2026, 3, 6, 8, 0, 0, DateTimeKind.Utc),
+                            HourlyRate = 24.60m,
+                            IsActive = true,
+                            Name = "Elena Castro",
+                            PhoneNumber = "+34 611 111 222",
+                            Role = "Logistics Coordinator"
+                        },
+                        new
+                        {
+                            Id = new Guid("8ab7e0ff-e769-490f-b503-96b7c6ef5d07"),
+                            CreatedAtUtc = new DateTime(2026, 3, 7, 8, 0, 0, DateTimeKind.Utc),
+                            HourlyRate = 27.40m,
+                            IsActive = false,
+                            Name = "Javier Ortega",
+                            PhoneNumber = "+34 611 333 444",
+                            Role = "Masonry Specialist"
                         });
                 });
 

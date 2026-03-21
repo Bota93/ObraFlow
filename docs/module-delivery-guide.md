@@ -11,6 +11,11 @@ The current MVP modules are:
 - Incidents
 - Materials
 
+Current implementation note:
+
+- `Workers`, `DailyReports`, and `Incidents` already exist as full vertical slices
+- `Materials` currently exists only in Domain and Infrastructure persistence
+
 ## Delivery Principle
 
 A module should be implemented as a vertical slice across the correct layers, not by pushing all logic into the API.
@@ -91,6 +96,7 @@ A module is in good shape when:
 - application contracts exist
 - persistence is isolated in Infrastructure
 - API endpoints are thin and documented
+- integration tests cover the main endpoint flow
 - migrations are added if schema changed
 - project documentation reflects the new behavior
 

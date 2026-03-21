@@ -58,6 +58,8 @@ When implementing a new module or expanding an existing one, the preferred seque
 5. Add migration if the database model changes.
 6. Update documentation.
 
+For endpoint changes, also update `docs/api-reference.md`.
+
 ## Pull Request Expectations
 
 A good pull request should include:
@@ -88,6 +90,12 @@ For a new contributor:
 4. Start the stack with Docker Compose or local PostgreSQL.
 5. Review the current migration and entity configurations.
 6. Pick one isolated module slice before touching multiple layers.
+
+Current recommended first issues:
+
+- materials module
+- centralized exception middleware
+- application and infrastructure test coverage
 
 ## Documentation Rule
 

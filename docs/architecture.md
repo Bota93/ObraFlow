@@ -43,9 +43,9 @@ Purpose:
 
 Current status:
 
-- the project exists and is referenced correctly
-- folders for abstractions and DTOs are prepared
-- concrete use-case implementations are still pending
+- DTOs exist for `Workers`, `DailyReports`, and `Incidents`
+- service contracts exist for those modules
+- the layer stays free of HTTP and EF Core concerns
 
 ### ObraFlow.Infrastructure
 
@@ -60,7 +60,9 @@ Current contents:
 
 - `AppDbContext`
 - entity configurations for all MVP entities
-- initial migration targeting PostgreSQL
+- PostgreSQL-targeted migrations
+- worker seed data
+- service implementations for `Workers`, `DailyReports`, and `Incidents`
 
 ### ObraFlow.Api
 
@@ -75,12 +77,14 @@ Current contents:
 
 - `Program.cs` with dependency injection and EF Core registration
 - Swagger setup
+- controllers for `Workers`, `DailyReports`, and `Incidents`
 - runtime configuration files
 - Dockerfile
 
 Current limitation:
 
-- there are no feature controllers yet, so Swagger starts but does not expose the MVP resources yet
+- `Materials` is not exposed yet through the Application and API layers
+- centralized exception middleware is not implemented yet
 
 ## Dependency Direction
 

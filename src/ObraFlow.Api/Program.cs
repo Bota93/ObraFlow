@@ -18,6 +18,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         }));
 builder.Services.AddScoped<IWorkerService, WorkerService>();
 builder.Services.AddScoped<IDailyReportService, DailyReportService>();
+builder.Services.AddScoped<IIncidentService, IncidentService>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 
 var app = builder.Build();
 

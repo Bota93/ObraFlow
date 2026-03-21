@@ -10,7 +10,8 @@ If you are new to the project, read in this order:
 2. `docs/architecture.md`
 3. `docs/project-status.md`
 4. `docs/setup-and-operations.md`
-5. `docs/contributing.md`
+5. `docs/api-reference.md`
+6. `docs/contributing.md`
 
 ## Documents
 
@@ -24,6 +25,7 @@ If you are new to the project, read in this order:
 - `docs/architecture.md`: layer responsibilities and dependency direction
 - `docs/module-delivery-guide.md`: how to implement a new module without breaking architecture
 - `docs/api-guidelines.md`: API design and controller conventions
+- `docs/api-reference.md`: current implemented endpoints and sample payloads
 
 ### Runtime And Persistence
 

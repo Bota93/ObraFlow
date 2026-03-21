@@ -11,13 +11,14 @@ Right now, the repository has:
 - a layered solution structure
 - PostgreSQL integration
 - EF Core mappings
-- an initial migration
+- migrations
 - Docker-based local runtime
+- API integration tests for `Workers`, `DailyReports`, and `Incidents`
 
 What is still missing:
 
-- automated tests
-- validation coverage
+- application-level tests
+- infrastructure-focused persistence tests
 - centralized error handling
 - health and quality gates in CI
 
@@ -41,6 +42,7 @@ Typical checks:
 - migrations apply cleanly when schema changes
 - Docker Compose still starts when runtime or infrastructure changes
 - updated endpoints return the expected status codes
+- integration tests pass for affected HTTP modules
 - documentation matches the implemented behavior
 
 ## Expected Test Layers As The Project Grows
@@ -85,9 +87,9 @@ These should validate:
 
 The best next additions are:
 
-- a test project structure aligned with the current layers
-- integration tests for the database and API
-- consistent validation rules
+- an application test project aligned with the current layers
+- infrastructure tests that exercise PostgreSQL behavior and migrations
+- consistent validation and exception handling
 - a shared API error contract
 
 ## Documentation Rule
