@@ -4,6 +4,15 @@ ObraFlow is a portfolio-ready construction site management backend built with AS
 
 The repository already includes working MVP slices for `Workers`, `DailyReports`, and `Incidents`, plus persistence support for `Materials`. The project is structured to stay buildable, easy to extend, and aligned with the architectural rules in `AGENTS.md`.
 
+## Features
+
+- Workers management (CRUD)
+- Daily reports tracking
+- Incident management
+- Dashboard summary with aggregated metrics
+- Integration tests with isolated test database
+- Dockerized environment with PostgreSQL
+
 ## Current Stack
 
 - .NET 10
