@@ -36,5 +36,45 @@ public static class WorkerSeed
             CreatedAtUtc = new DateTime(2026, 3, 3, 8, 0, 0, DateTimeKind.Utc),
             IsActive = true,
         },
+        new Worker
+        {
+            Id = Guid.Parse("2f99d8d5-2f8b-4d24-9781-1f1f7ad7d104"),
+            Name = "Sofia Navarro",
+            Role = "Project Engineer",
+            PhoneNumber = "+34 600 777 888",
+            HourlyRate = 31.90m,
+            CreatedAtUtc = new DateTime(2026, 3, 4, 8, 0, 0, DateTimeKind.Utc),
+            IsActive = true,
+        },
+        new Worker
+        {
+            Id = Guid.Parse("dbf81307-b91f-49f1-8ab5-46cd7b7ed105"),
+            Name = "Diego Perez",
+            Role = "Foreman",
+            PhoneNumber = "+34 600 999 000",
+            HourlyRate = 29.80m,
+            CreatedAtUtc = new DateTime(2026, 3, 5, 8, 0, 0, DateTimeKind.Utc),
+            IsActive = true,
+        },
+        new Worker
+        {
+            Id = Guid.Parse("f44da1bc-441f-4de3-b2f4-a9798db17a06"),
+            Name = "Elena Castro",
+            Role = "Logistics Coordinator",
+            PhoneNumber = "+34 611 111 222",
+            HourlyRate = 24.60m,
+            CreatedAtUtc = new DateTime(2026, 3, 6, 8, 0, 0, DateTimeKind.Utc),
+            IsActive = true,
+        },
+        new Worker
+        {
+            Id = Guid.Parse("8ab7e0ff-e769-490f-b503-96b7c6ef5d07"),
+            Name = "Javier Ortega",
+            Role = "Masonry Specialist",
+            PhoneNumber = "+34 611 333 444",
+            HourlyRate = 27.40m,
+            CreatedAtUtc = new DateTime(2026, 3, 7, 8, 0, 0, DateTimeKind.Utc),
+            IsActive = false,
+        },
     ];
 }
