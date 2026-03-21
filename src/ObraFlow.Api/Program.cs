@@ -17,6 +17,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
             npgsqlOptions.MigrationsAssembly("ObraFlow.Infrastructure");
         }));
 builder.Services.AddScoped<IWorkerService, WorkerService>();
+builder.Services.AddScoped<IDailyReportService, DailyReportService>();
 
 var app = builder.Build();
 

@@ -1,30 +1,53 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using ObraFlow.Infrastructure.Persistence;
+using System.Data.Common;
 
 namespace ObraFlow.Api.IntegrationTests;
 
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
-    private readonly string _databaseName = $"obraflow_test_{Guid.NewGuid():N}";
+    private DbConnection? _connection;
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment("Testing");
 
-        builder.ConfigureAppConfiguration((_, configBuilder) =>
+        builder.ConfigureLogging(logging =>
         {
-            var settings = new Dictionary<string, string?>
-            {
-                ["ConnectionStrings:DefaultConnection"] =
-                    $"Host=localhost;Port=5432;Database={_databaseName};Username=postgres;Password=postgres"
-            };
+            logging.ClearProviders();
+        });
 
-            configBuilder.AddInMemoryCollection(settings);
+        builder.ConfigureServices(services =>
+        {
+            var dbContextDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<AppDbContext>));
+            if (dbContextDescriptor is not null)
+            {
+                services.Remove(dbContextDescriptor);
+            }
+
+            var connectionDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbConnection));
+            if (connectionDescriptor is not null)
+            {
+                services.Remove(connectionDescriptor);
+            }
+
+            services.AddSingleton<DbConnection>(_ =>
+            {
+                _connection = new SqliteConnection("Data Source=:memory:");
+                _connection.Open();
+                return _connection;
+            });
+
+            services.AddDbContext<AppDbContext>((serviceProvider, options) =>
+            {
+                options.UseSqlite(serviceProvider.GetRequiredService<DbConnection>());
+            });
         });
     }
 
@@ -36,8 +59,18 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
         dbContext.Database.EnsureDeleted();
-        dbContext.Database.Migrate();
+        dbContext.Database.EnsureCreated();
 
         return host;
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _connection?.Dispose();
+        }
+
+        base.Dispose(disposing);
     }
 }
