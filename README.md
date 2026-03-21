@@ -55,10 +55,11 @@ Already implemented:
 - entity configurations for all MVP entities
 - migrations under `Infrastructure/Persistence/Migrations`
 - coherent seed data for workers, daily reports, and incidents
+- closed MVP modules for `Workers`, `DailyReports`, and `Incidents`
 - CRUD endpoints for `Workers`, `DailyReports`, and `Incidents`
-- dashboard summary endpoint
-- application DTOs and service contracts for those modules
-- infrastructure service implementations for those modules
+- `GET /dashboard/summary`
+- application DTOs and service contracts for `Workers`, `DailyReports`, `Incidents`, and `Dashboard`
+- infrastructure service implementations for `Workers`, `DailyReports`, `Incidents`, and `Dashboard`
 - Swagger/OpenAPI
 - Docker Compose for API + PostgreSQL
 - API integration tests for `Workers`, `DailyReports`, `Incidents`, and `Dashboard`
