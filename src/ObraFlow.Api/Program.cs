@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using ObraFlow.Application.Abstractions;
 using ObraFlow.Infrastructure.Persistence;
+using ObraFlow.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         {
             npgsqlOptions.MigrationsAssembly("ObraFlow.Infrastructure");
         }));
+builder.Services.AddScoped<IWorkerService, WorkerService>();
 
 var app = builder.Build();
 
@@ -28,3 +31,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program;
