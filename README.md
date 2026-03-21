@@ -54,13 +54,15 @@ Already implemented:
 - PostgreSQL `AppDbContext`
 - entity configurations for all MVP entities
 - migrations under `Infrastructure/Persistence/Migrations`
-- worker seed data
+- coherent seed data for workers, daily reports, and incidents
+- closed MVP modules for `Workers`, `DailyReports`, and `Incidents`
 - CRUD endpoints for `Workers`, `DailyReports`, and `Incidents`
-- application DTOs and service contracts for those modules
-- infrastructure service implementations for those modules
+- `GET /dashboard/summary`
+- application DTOs and service contracts for `Workers`, `DailyReports`, `Incidents`, and `Dashboard`
+- infrastructure service implementations for `Workers`, `DailyReports`, `Incidents`, and `Dashboard`
 - Swagger/OpenAPI
 - Docker Compose for API + PostgreSQL
-- API integration tests for `Workers`, `DailyReports`, and `Incidents`
+- API integration tests for `Workers`, `DailyReports`, `Incidents`, and `Dashboard`
 
 Still pending:
 
@@ -131,11 +133,14 @@ dotnet ef migrations add <MigrationName> --project src/ObraFlow.Infrastructure -
 
 Current routes:
 
+- `/dashboard/summary`
 - `/workers`
 - `/daily-reports`
 - `/incidents`
 
-Each of those resources exposes `GET`, `GET by id`, `POST`, `PUT`, and `DELETE`.
+`/dashboard/summary` exposes `GET`.
+
+`/workers`, `/daily-reports`, and `/incidents` expose `GET`, `GET by id`, `POST`, `PUT`, and `DELETE`.
 
 For concrete examples, see `docs/api-reference.md`.
 

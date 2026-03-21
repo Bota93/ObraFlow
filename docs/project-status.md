@@ -2,7 +2,7 @@
 
 ## Summary
 
-ObraFlow is currently in the feature-integration stage of the MVP.
+ObraFlow is currently a functional MVP backend.
 
 The solution already demonstrates:
 
@@ -12,6 +12,8 @@ The solution already demonstrates:
 - migrations
 - Dockerized local execution
 - working HTTP endpoints for three MVP modules
+- a working dashboard summary endpoint
+- coherent seed data for realistic API responses
 - API integration tests
 
 ## What Exists Today
@@ -38,8 +40,8 @@ Implemented:
 - migration snapshot
 - migrations
 - PostgreSQL provider setup
-- worker seed data
-- persistence services for `Workers`, `DailyReports`, and `Incidents`
+- seed data for `Workers`, `DailyReports`, and `Incidents`
+- persistence services for `Workers`, `DailyReports`, `Incidents`, and `Dashboard`
 
 ### API
 
@@ -48,6 +50,7 @@ Implemented:
 - dependency injection bootstrap
 - database registration
 - Swagger/OpenAPI
+- `DashboardController`
 - `WorkersController`
 - `DailyReportsController`
 - `IncidentsController`
@@ -58,8 +61,8 @@ Implemented:
 
 Implemented:
 
-- DTOs for `Workers`, `DailyReports`, and `Incidents`
-- abstractions for `Workers`, `DailyReports`, and `Incidents`
+- DTOs for `Workers`, `DailyReports`, `Incidents`, and `Dashboard`
+- abstractions for `Workers`, `DailyReports`, `Incidents`, and `Dashboard`
 
 Still pending:
 
@@ -72,7 +75,7 @@ The following features are not yet in the repository:
 
 - Materials CRUD endpoints
 - middleware-based error handling
-- broader cross-layer tests
+- broader cross-layer tests beyond the current integration suite
 - authentication and authorization
 
 ## Recommended Next Delivery Order
@@ -89,8 +92,8 @@ The next steps that best fit the current architecture are:
 
 In its current form, ObraFlow is best presented as:
 
-- a layered backend with implemented CRUD slices
-- a persistence-focused .NET project with real HTTP coverage
-- an architecture-first API still finishing the last MVP module
+- a layered backend MVP with implemented CRUD slices
+- a persistence-focused .NET project with tested HTTP coverage
+- an architecture-first API with one remaining MVP module pending
 
 That is a valid and professional stage, as long as the documentation clearly distinguishes what is already built from what is planned.

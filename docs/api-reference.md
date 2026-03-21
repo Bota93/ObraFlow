@@ -4,6 +4,7 @@
 
 Current implemented HTTP resources:
 
+- `Dashboard`
 - `Workers`
 - `DailyReports`
 - `Incidents`
@@ -12,6 +13,23 @@ Base URL examples in local development:
 
 - `http://localhost:5000`
 - `http://localhost:5000/swagger`
+
+## Dashboard
+
+Routes:
+
+- `GET /dashboard/summary`
+
+Response fields:
+
+- `totalWorkers`
+- `activeWorkers`
+- `totalDailyReports`
+- `openIncidents`
+- `inProgressIncidents`
+- `resolvedIncidents`
+- `hoursWorkedToday`
+- `hoursWorkedLast7Days`
 
 ## Workers
 
