@@ -22,14 +22,18 @@ Already mostly in place:
 
 ## Phase 2: MVP Modules
 
-Implement the first vertical slices for:
+Current state:
 
-- Workers
-- DailyReports
-- Incidents
+- `Workers` implemented
+- `DailyReports` implemented
+- `Incidents` implemented
+- `Materials` pending outside persistence
+
+Finish the remaining MVP module work for:
+
 - Materials
 
-For each module, the target is:
+For the remaining module and any expansions, the target is:
 
 - Application DTOs
 - service contracts
@@ -50,10 +54,10 @@ Add:
 
 Add:
 
-- seed data strategy
+- broader seed data strategy if more modules need it
 - logging
 - health checks
-- basic test coverage
+- broader automated coverage across layers
 - API examples in documentation
 
 ## Phase 5: Security And Growth

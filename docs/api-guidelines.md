@@ -2,7 +2,7 @@
 
 ## Purpose
 
-These guidelines define how the HTTP layer should evolve as ObraFlow adds controllers and endpoints.
+These guidelines define how the HTTP layer should evolve as ObraFlow grows beyond the currently implemented `Workers`, `DailyReports`, and `Incidents` endpoints.
 
 ## Controller Rules
 
@@ -24,20 +24,20 @@ Controllers should not:
 
 Prefer resource-based routes such as:
 
-- `/api/workers`
-- `/api/daily-reports`
-- `/api/incidents`
-- `/api/materials`
+- `/workers`
+- `/daily-reports`
+- `/incidents`
+- `/materials`
 
 Use plural resource names consistently.
 
 ## Response Behavior
 
-As features are added, aim for these baseline behaviors:
+Current baseline behaviors in the project:
 
 - `200 OK` for successful reads and updates when returning content
 - `201 Created` for successful creates
-- `204 No Content` for successful deletes or updates without response content
+- `204 No Content` for successful deletes
 - `400 Bad Request` for validation failures
 - `404 Not Found` when a resource does not exist
 
@@ -52,7 +52,7 @@ Avoid:
 
 ## Validation
 
-Validation should become explicit as the API grows. The preferred long-term direction is:
+Validation is currently handled with DTO data annotations and `IValidatableObject` where needed. The preferred next step is:
 
 - validate incoming requests consistently
 - centralize error formatting
@@ -60,7 +60,7 @@ Validation should become explicit as the API grows. The preferred long-term dire
 
 ## Swagger
 
-Swagger is already configured in the API project. As controllers are added:
+Swagger is already configured in the API project. For new endpoints:
 
 - keep route names clear
 - document request and response models through conventional ASP.NET Core patterns

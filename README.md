@@ -1,15 +1,8 @@
 # ObraFlow
 
-ObraFlow is a portfolio-ready backend project for construction site management. The solution is built with ASP.NET Core, Entity Framework Core, PostgreSQL, and Docker Compose, following a clean layered architecture.
+ObraFlow is a portfolio-ready construction site management backend built with ASP.NET Core, Entity Framework Core, PostgreSQL, Docker Compose, and a strict layered architecture.
 
-At the current stage, the repository provides the foundational backend structure, the database model, EF Core configuration, an initial migration, and containerized infrastructure for running the API and PostgreSQL together.
-
-## Goals
-
-- Keep the solution compile-ready and architecture-driven
-- Separate domain, application, infrastructure, and HTTP concerns
-- Model the MVP entities for construction site operations
-- Prepare the codebase for feature growth without overengineering
+The repository already includes working MVP slices for `Workers`, `DailyReports`, and `Incidents`, plus persistence support for `Materials`. The project is structured to stay buildable, easy to extend, and aligned with the architectural rules in `AGENTS.md`.
 
 ## Current Stack
 
@@ -19,6 +12,7 @@ At the current stage, the repository provides the foundational backend structure
 - PostgreSQL 16
 - Docker Compose
 - Swagger / OpenAPI
+- xUnit + FluentAssertions integration tests
 
 ## Solution Structure
 
@@ -28,51 +22,57 @@ src/
 ├── ObraFlow.Application
 ├── ObraFlow.Domain
 └── ObraFlow.Infrastructure
+
+tests/
+└── ObraFlow.Api.IntegrationTests
 ```
 
-### Layer Responsibilities
+## Layer Responsibilities
 
-- `ObraFlow.Domain`: business entities and enums
-- `ObraFlow.Application`: application contracts and DTO space for use cases
-- `ObraFlow.Infrastructure`: EF Core, PostgreSQL integration, entity configurations, migrations
-- `ObraFlow.Api`: composition root, HTTP pipeline, Swagger, runtime configuration
+- `ObraFlow.Domain`: entities and enums only
+- `ObraFlow.Application`: DTOs and service contracts
+- `ObraFlow.Infrastructure`: EF Core, PostgreSQL, entity configurations, migrations, service implementations, seed data
+- `ObraFlow.Api`: controllers, HTTP pipeline, Swagger, DI, runtime configuration
 
-## MVP Scope
+## MVP Coverage
 
-The MVP domain currently models:
+Implemented vertical slices:
 
 - Workers
-- Daily reports
+- DailyReports
 - Incidents
+
+Implemented at persistence level only:
+
 - Materials
 
-The persistence layer already contains mappings and an initial migration for these modules.
+## Current Status
 
-## Project Status
+Already implemented:
 
-What is already implemented:
+- layered solution and project references
+- PostgreSQL `AppDbContext`
+- entity configurations for all MVP entities
+- migrations under `Infrastructure/Persistence/Migrations`
+- worker seed data
+- CRUD endpoints for `Workers`, `DailyReports`, and `Incidents`
+- application DTOs and service contracts for those modules
+- infrastructure service implementations for those modules
+- Swagger/OpenAPI
+- Docker Compose for API + PostgreSQL
+- API integration tests for `Workers`, `DailyReports`, and `Incidents`
 
-- Layered solution and project references
-- EF Core `AppDbContext`
-- PostgreSQL provider configuration
-- Entity mappings for all MVP entities
-- Initial EF Core migration
-- Dockerfile for the API
-- `docker-compose.yml` with API and PostgreSQL services
-- Swagger setup
+Still pending:
 
-What is intentionally still pending:
-
-- Controllers and HTTP endpoints for the MVP modules
-- Application DTOs, services, and use-case orchestration
-- Validation and exception middleware
-- Seed data
-- Automated tests
-- Authentication and authorization
+- Materials application module and HTTP endpoints
+- centralized exception middleware
+- a shared API error contract beyond default validation responses
+- broader test coverage at infrastructure and application levels
+- authentication and authorization
 
 ## Quick Start
 
-### Run with Docker Compose
+### Run With Docker Compose
 
 ```bash
 docker compose up --build
@@ -84,7 +84,7 @@ Services:
 - Swagger UI: `http://localhost:5000/swagger`
 - PostgreSQL: `localhost:5432`
 
-Default database credentials used by Docker Compose:
+Default Docker database credentials:
 
 - Database: `obraflowdb`
 - Username: `postgres`
@@ -92,62 +92,63 @@ Default database credentials used by Docker Compose:
 
 ### Run Locally
 
-1. Start a PostgreSQL instance.
-2. Update the connection string in `src/ObraFlow.Api/appsettings.json` if needed.
-3. Run the API project:
+1. Start PostgreSQL.
+2. Check the connection string in `src/ObraFlow.Api/appsettings.json`.
+3. Apply migrations if needed.
+4. Run the API:
 
 ```bash
 dotnet run --project src/ObraFlow.Api/ObraFlow.Api.csproj
 ```
 
-## Database
+## Common Commands
 
-The API reads the `DefaultConnection` connection string from configuration. The default local value is:
+Build the solution:
 
-```text
-Host=localhost;Port=5432;Database=obraflowdb;Username=postgres;Password=postgres
+```bash
+dotnet build ObraFlow.slnx
 ```
 
-In Docker Compose, the API overrides this value and connects to the `db` service using the internal hostname `db`.
+Run API integration tests:
 
-## Migrations
+```bash
+dotnet test tests/ObraFlow.Api.IntegrationTests/ObraFlow.Api.IntegrationTests.csproj
+```
 
-The repository already includes an initial migration in `ObraFlow.Infrastructure`.
-
-Typical EF Core commands:
+Apply migrations:
 
 ```bash
 dotnet ef database update --project src/ObraFlow.Infrastructure --startup-project src/ObraFlow.Api
+```
+
+Add a migration:
+
+```bash
 dotnet ef migrations add <MigrationName> --project src/ObraFlow.Infrastructure --startup-project src/ObraFlow.Api
 ```
 
+## API Surface
+
+Current routes:
+
+- `/workers`
+- `/daily-reports`
+- `/incidents`
+
+Each of those resources exposes `GET`, `GET by id`, `POST`, `PUT`, and `DELETE`.
+
+For concrete examples, see `docs/api-reference.md`.
+
 ## Documentation
 
-Additional project documentation is available in `docs/`:
+Start here:
 
 - `docs/index.md`
 - `docs/architecture.md`
-- `docs/module-delivery-guide.md`
-- `docs/setup-and-operations.md`
-- `docs/database.md`
-- `docs/api-guidelines.md`
-- `docs/testing-and-quality.md`
 - `docs/project-status.md`
-- `docs/roadmap.md`
-- `docs/contributing.md`
-- `docs/decisions/0001-layered-architecture.md`
-- `docs/decisions/README.md`
-- `.github/PULL_REQUEST_TEMPLATE.md`
+- `docs/setup-and-operations.md`
+- `docs/api-reference.md`
 
 ## Portfolio Notes
 
-This repository is intentionally focused on backend fundamentals:
-
-- clean project boundaries
-- persistence modeled with EF Core
-- containerized local environment
-- space prepared for use cases and HTTP endpoints
-
-It is a strong foundation project that can grow into a full backend API without requiring a structural rewrite.
-
-For team growth, the repository now includes contributor-facing documentation covering onboarding, delivery rules, architectural decisions, and the expected path for implementing new modules.
+ObraFlow is already more than a scaffold: it demonstrates clean boundaries, EF Core persistence, containerized runtime, tested HTTP endpoints, and a controlled path for adding the remaining module work without collapsing the architecture.

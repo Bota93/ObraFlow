@@ -66,6 +66,16 @@ The standard build command is:
 dotnet build ObraFlow.slnx
 ```
 
+## Tests
+
+Run the API integration test project with:
+
+```bash
+dotnet test tests/ObraFlow.Api.IntegrationTests/ObraFlow.Api.IntegrationTests.csproj
+```
+
+The test suite uses `CustomWebApplicationFactory` and an in-memory SQLite database for HTTP-level verification.
+
 ## Swagger
 
 Swagger is enabled only in the Development environment. That behavior is configured in `src/ObraFlow.Api/Program.cs`.
@@ -76,7 +86,6 @@ At this stage:
 
 - the application boots as an ASP.NET Core API
 - EF Core is configured against PostgreSQL
-- there are no resource controllers yet
+- `Workers`, `DailyReports`, and `Incidents` are exposed through controllers
+- `Materials` is mapped in persistence but not exposed yet as an HTTP module
 - HTTPS redirection is enabled in the pipeline
-
-Because there are no controllers yet, the API primarily acts as an infrastructure-ready shell around the database integration.

@@ -26,13 +26,20 @@ Table: `workers`
 Columns:
 
 - `Id` as primary key
-- `FullName` required, max length 120
+- `Name` required, max length 140
 - `Role` required, max length 80
-- `Phone` required, max length 30
+- `PhoneNumber` required, max length 30
+- `HourlyRate` required, precision `(10,2)`
+- `CreatedAtUtc` required
+- `IsActive` required
 
 Relationship:
 
 - one worker has many daily reports
+
+Seed data:
+
+- three workers are inserted through `WorkerSeed`
 
 ### DailyReport
 
@@ -78,8 +85,9 @@ Columns:
 The initial migration is already present:
 
 - `20260319093208_InitialCreate`
+- `20260319120000_WorkersModule`
 
-It creates the four MVP tables and the `dailyReports` to `workers` foreign key.
+The current migration set creates the MVP tables, the `dailyReports` to `workers` foreign key, and the worker seed entries reflected in the model snapshot.
 
 ## Common EF Core Commands
 
