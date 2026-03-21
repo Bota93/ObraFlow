@@ -1,32 +1,66 @@
 using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Testing;
 using ObraFlow.Application.DTOs.Workers;
 
 namespace ObraFlow.Api.IntegrationTests.Workers;
 
-public class WorkersEndpointsTests : IClassFixture<CustomWebApplicationFactory>
+public class WorkersEndpointsTests
 {
-    private readonly HttpClient _client;
-
-    public WorkersEndpointsTests(CustomWebApplicationFactory factory)
+    private static HttpClient CreateClient(CustomWebApplicationFactory factory)
     {
-        _client = factory.CreateClient();
+        return factory.CreateClient(new WebApplicationFactoryClientOptions
+        {
+            AllowAutoRedirect = false,
+            BaseAddress = new Uri("https://localhost")
+        });
+    }
+
+    private static async Task<WorkerDto> CreateWorkerAsync(HttpClient client, string name)
+    {
+        var newWorker = new
+        {
+            name,
+            role = "Electrician",
+            phoneNumber = "1234567",
+            hourlyRate = 25.50m,
+            isActive = true
+        };
+
+        var response = await client.PostAsJsonAsync("/workers", newWorker);
+        response.StatusCode.Should().Be(HttpStatusCode.Created);
+
+        var createdWorker = await response.Content.ReadFromJsonAsync<WorkerDto>();
+        createdWorker.Should().NotBeNull();
+
+        return createdWorker!;
     }
 
     [Fact]
     public async Task GetWorkers_ShouldReturnOk()
     {
+        using var factory = new CustomWebApplicationFactory();
+        using var client = CreateClient(factory);
+
         // Act
-        var response = await _client.GetAsync("/workers");
+        var response = await client.GetAsync("/workers");
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var workers = await response.Content.ReadFromJsonAsync<List<WorkerDto>>();
+        workers.Should().NotBeNull();
+        workers.Should().NotBeEmpty();
     }
 
     [Fact]
     public async Task PostWorker_ShouldReturnCreated()
     {
+        using var factory = new CustomWebApplicationFactory();
+        using var client = CreateClient(factory);
+
         // Arrange
         var newWorker = new
         {
@@ -38,51 +72,72 @@ public class WorkersEndpointsTests : IClassFixture<CustomWebApplicationFactory>
         };
 
         // Act
-        var response = await _client.PostAsJsonAsync("/workers", newWorker);
+        var response = await client.PostAsJsonAsync("/workers", newWorker);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Created);
+
+        response.Headers.Location.Should().NotBeNull();
+
+        var createdWorker = await response.Content.ReadFromJsonAsync<WorkerDto>();
+        createdWorker.Should().NotBeNull();
+        createdWorker!.Id.Should().NotBe(Guid.Empty);
+        createdWorker.Name.Should().Be(newWorker.name);
+        createdWorker.Role.Should().Be(newWorker.role);
+        createdWorker.PhoneNumber.Should().Be(newWorker.phoneNumber);
+        createdWorker.HourlyRate.Should().Be(newWorker.hourlyRate);
+        createdWorker.IsActive.Should().BeTrue();
     }
 
     [Fact]
     public async Task GetWorkers_ShouldReturnWorkersList()
     {
+        using var factory = new CustomWebApplicationFactory();
+        using var client = CreateClient(factory);
+
         // Act
-        var response = await _client.GetAsync("/workers");
+        var response = await client.GetAsync("/workers");
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var workers = await response.Content.ReadFromJsonAsync<List<WorkerDto>>();
         workers.Should().NotBeNull();
+        workers.Should().Contain(x => x.Name == "Miguel Torres");
+        workers.Should().Contain(x => x.Name == "Laura Martinez");
+        workers.Should().Contain(x => x.Name == "Carlos Ramirez");
     }
+
     [Fact]
     public async Task PostWorker_ShouldPersistWorker()
     {
-        var newWorker = new
-        {
-            name = "Persist Test",
-            role = "Plumber",
-            phoneNumber = "1234567",
-            hourlyRate = 30.00m,
-            isActive = true
-        };
+        using var factory = new CustomWebApplicationFactory();
+        using var client = CreateClient(factory);
 
-        var postResponse = await _client.PostAsJsonAsync("/workers", newWorker);
-        postResponse.StatusCode.Should().Be(HttpStatusCode.Created);
+        var created = await CreateWorkerAsync(client, "Persist Test");
 
-        var created = await postResponse.Content.ReadFromJsonAsync<WorkerDto>();
-
-        var getResponse = await _client.GetAsync($"/workers/{created!.Id}");
+        var getResponse = await client.GetAsync($"/workers/{created.Id}");
         getResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var persistedWorker = await getResponse.Content.ReadFromJsonAsync<WorkerDto>();
+        persistedWorker.Should().NotBeNull();
+        persistedWorker!.Id.Should().Be(created.Id);
+        persistedWorker.Name.Should().Be("Persist Test");
+        persistedWorker.Role.Should().Be("Electrician");
+        persistedWorker.PhoneNumber.Should().Be("1234567");
+        persistedWorker.HourlyRate.Should().Be(25.50m);
+        persistedWorker.IsActive.Should().BeTrue();
     }
 
     [Fact]
     public async Task GetWorkerById_ShouldReturn404_WhenNotFound()
     {
+        using var factory = new CustomWebApplicationFactory();
+        using var client = CreateClient(factory);
+
         var id = Guid.NewGuid();
 
-        var response = await _client.GetAsync($"/workers/{id}");
+        var response = await client.GetAsync($"/workers/{id}");
 
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
@@ -90,6 +145,9 @@ public class WorkersEndpointsTests : IClassFixture<CustomWebApplicationFactory>
     [Fact]
     public async Task PostWorker_ShouldReturnBadRequest_WhenInvalid()
     {
+        using var factory = new CustomWebApplicationFactory();
+        using var client = CreateClient(factory);
+
         var invalidWorker = new
         {
             name = "", // inválido
@@ -98,25 +156,25 @@ public class WorkersEndpointsTests : IClassFixture<CustomWebApplicationFactory>
             hourlyRate = 0m
         };
 
-        var response = await _client.PostAsJsonAsync("/workers", invalidWorker);
+        var response = await client.PostAsJsonAsync("/workers", invalidWorker);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+        var validationProblem = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+        validationProblem.Should().NotBeNull();
+        validationProblem!.Errors.Should().ContainKey("Name");
+        validationProblem.Errors.Should().ContainKey("Role");
+        validationProblem.Errors.Should().ContainKey("PhoneNumber");
+        validationProblem.Errors.Should().ContainKey("HourlyRate");
     }
 
     [Fact]
     public async Task UpdateWorker_ShouldModifyWorker()
     {
-        var newWorker = new
-        {
-            name = "Update Test",
-            role = "Electrician",
-            phoneNumber = "1234567",
-            hourlyRate = 20m,
-            isActive = true
-        };
+        using var factory = new CustomWebApplicationFactory();
+        using var client = CreateClient(factory);
 
-        var post = await _client.PostAsJsonAsync("/workers", newWorker);
-        var created = await post.Content.ReadFromJsonAsync<WorkerDto>();
+        var created = await CreateWorkerAsync(client, "Update Test");
 
         var update = new
         {
@@ -127,35 +185,39 @@ public class WorkersEndpointsTests : IClassFixture<CustomWebApplicationFactory>
             isActive = false
         };
 
-        var putResponse = await _client.PutAsJsonAsync($"/workers/{created!.Id}", update);
+        var putResponse = await client.PutAsJsonAsync($"/workers/{created.Id}", update);
 
         putResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var updated = await putResponse.Content.ReadFromJsonAsync<WorkerDto>();
+        updated.Should().NotBeNull();
         updated!.Name.Should().Be("Updated Name");
+        updated.Role.Should().Be("Supervisor");
+        updated.PhoneNumber.Should().Be("7654321");
+        updated.HourlyRate.Should().Be(40m);
+        updated.IsActive.Should().BeFalse();
+
+        var getResponse = await client.GetAsync($"/workers/{created.Id}");
+        getResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var persistedWorker = await getResponse.Content.ReadFromJsonAsync<WorkerDto>();
+        persistedWorker.Should().NotBeNull();
+        persistedWorker!.Name.Should().Be("Updated Name");
     }
 
     [Fact]
     public async Task DeleteWorker_ShouldRemoveWorker()
     {
-        var newWorker = new
-        {
-            name = "Delete Test",
-            role = "Worker",
-            phoneNumber = "1234567",
-            hourlyRate = 20m,
-            isActive = true
-        };
+        using var factory = new CustomWebApplicationFactory();
+        using var client = CreateClient(factory);
 
-        var post = await _client.PostAsJsonAsync("/workers", newWorker);
-        var created = await post.Content.ReadFromJsonAsync<WorkerDto>();
+        var created = await CreateWorkerAsync(client, "Delete Test");
 
-        var deleteResponse = await _client.DeleteAsync($"/workers/{created!.Id}");
+        var deleteResponse = await client.DeleteAsync($"/workers/{created.Id}");
 
         deleteResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
-        var getResponse = await _client.GetAsync($"/workers/{created.Id}");
+        var getResponse = await client.GetAsync($"/workers/{created.Id}");
         getResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
-
 }
