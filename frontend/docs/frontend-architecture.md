@@ -14,9 +14,9 @@ This is a working document, not theoretical documentation.
 
 ## Current Status
 
-The frontend is not implemented yet.
+The frontend workspace has been initialized with a base Vite + React + TypeScript setup.
 
-This document describes the intended direction for the initial implementation and should be kept aligned with the real codebase as the project evolves.
+The feature architecture described in this document is still the target structure and should guide the next implementation steps as the codebase evolves.
 
 ## Planned Tech Stack
 
