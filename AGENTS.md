@@ -1,112 +1,194 @@
 # AGENTS.md
 
 ## Mission
-Build ObraFlow as a portfolio-ready backend project using .NET, PostgreSQL, Docker and clean layering.
+Build ObraFlow as a serious portfolio project and product-ready system for construction site management.
+
+The repository must support:
+- a production-style backend
+- a future frontend application
+- clean evolution without mixing responsibilities across workspaces
 
 ## Product context
-ObraFlow is a construction site management backend.
-The MVP includes:
+ObraFlow is a construction site management system.
+
+It replaces fragmented workflows such as:
+- paper-based daily reports
+- incident tracking through informal communication
+- unstructured worker management
+
+The current backend MVP includes:
 - Workers
 - DailyReports
 - Incidents
+- Dashboard
+
+Backend persistence already includes:
 - Materials
 
-## Architecture rules
-The solution is split into four projects:
+Materials is not yet implemented end-to-end through the Application and API layers.
+
+## Repository layout
+This repository is organized as a monorepo:
+
+- `backend/`
+  - .NET solution
+  - Docker Compose
+  - backend-specific skills in `backend/.skills/`
+  - backend documentation
+  - source code
+  - tests
+
+- `frontend/`
+  - frontend application (React planned)
+  - UI layer consuming backend API
+
+## Monorepo rules
+- Keep backend and frontend isolated
+- Do not mix backend code into `frontend/`
+- Do not mix frontend code into `backend/`
+- Do not place application logic at repository root
+- Root should contain only coordination files (README, AGENTS, etc.)
+- Always respect workspace boundaries when modifying code
+
+## Backend architecture rules
+The backend is split into four projects:
 
 - ObraFlow.Domain
   - Business entities
   - Enums
   - Domain exceptions
-  - No framework-specific dependencies unless strictly necessary
+  - No framework dependencies unless strictly necessary
 
 - ObraFlow.Application
   - DTOs
   - Service contracts
   - Use-case orchestration
   - No HTTP concerns
-  - No EF Core persistence details
+  - No EF Core persistence logic
 
 - ObraFlow.Infrastructure
   - EF Core
-  - PostgreSQL persistence
+  - PostgreSQL
   - DbContext
-  - Entity configurations
+  - Configurations
   - Migrations
   - Seed data
-  - External service implementations
 
 - ObraFlow.Api
   - Controllers
   - Middleware
-  - Dependency injection
-  - Configuration
+  - DI configuration
   - Swagger/OpenAPI
   - HTTP concerns only
 
+## Current implementation status
+### Backend
+- `Workers`, `DailyReports`, and `Incidents` are implemented end-to-end
+- `Dashboard` is implemented as an API endpoint with aggregated metrics
+- `Materials` exists in Domain and Infrastructure persistence only
+- PostgreSQL persistence is configured through EF Core
+- Docker Compose runs the API with PostgreSQL
+- Integration tests cover the implemented API modules
+
+### Frontend
+- planned
+- not yet implemented
+
+## Frontend direction
+Frontend must:
+- consume backend API only
+- avoid business logic duplication
+- keep structure simple and maintainable
+- avoid unnecessary complexity (state libraries, patterns) in MVP phase
+- prioritize clear product workflows and usability over visual complexity in the MVP phase
+
+Frontend is still provisional. Do not let frontend assumptions drive backend architecture changes.
+
 ## Non-negotiable rules
-- Do not collapse all layers into Api
+- Do not collapse layers into Api
 - Do not move persistence logic into controllers
 - Do not put EF Core configuration into Domain
-- Do not introduce unnecessary patterns just for aesthetics
-- Do not add code that is not compile-ready
+- Do not introduce unnecessary patterns
+- Do not add non-compilable code
 - Do not leave pseudo-code
-- Do not create duplicate DTOs without need
-- Do not invent files that are not referenced by the solution
+- Do not invent unused files
+- Do not refactor unrelated code during feature work
 
 ## Coding conventions
-- Use English for code, classes, methods and properties
-- Use clear names
-- Prefer small files with one responsibility
-- Prefer async methods for I/O work
+- Use English for all code
+- Use clear and explicit naming
+- Prefer small, single-responsibility files
+- Use async for I/O operations
 - Return proper HTTP status codes
 - Keep controllers thin
-- Put persistence configuration in Infrastructure/Persistence/Configurations
-- Keep migrations in Infrastructure/Persistence/Migrations
+
+Backend paths must respect monorepo structure:
+- Solution → `backend/ObraFlow.slnx`
+- API project → `backend/src/ObraFlow.Api`
+- Tests → `backend/tests/ObraFlow.Api.IntegrationTests`
+- Configurations → `backend/src/ObraFlow.Infrastructure/Persistence/Configurations`
+- Migrations → `backend/src/ObraFlow.Infrastructure/Persistence/Migrations`
 
 ## Working rules for AI assistants
 When proposing changes:
-1. Read the current project structure first
-2. Respect existing namespaces
-3. Generate complete files, not fragments, when possible
-4. Prefer minimal safe changes over broad rewrites
-5. Explain why a change is needed if it affects architecture
-6. Before suggesting a fix, identify whether the issue is:
+
+1. Identify the target workspace (`backend/` or `frontend/`)
+2. Read the current structure before modifying anything
+3. Respect namespaces and existing patterns
+4. Generate complete files when possible
+5. Prefer minimal safe changes
+6. Justify architectural changes
+7. Classify issues before fixing:
    - build error
    - dependency error
    - namespace/reference error
    - Docker error
    - EF Core migration error
    - runtime configuration error
+   - frontend build/tooling error
+   - API integration issue
 
 ## Delivery order
-1. Make the solution compile
-2. Make PostgreSQL connection work
-3. Make Docker Compose work
-4. Make migrations work
-5. Implement feature modules
-6. Improve validation and error handling
-7. Add documentation and polish
+1. Keep the backend buildable
+2. Keep backend tests passing
+3. Keep Docker working
+4. Keep migrations consistent
+5. Implement product features in the correct workspace
+6. Improve backend validation and error handling
+7. Implement frontend features without duplicating backend logic
+8. Improve documentation
+9. Expand product capabilities without breaking workspace boundaries
 
 ## Git workflow
 - main = stable
 - develop = integration
-- feature/* = work branches
+- feature/* = isolated work
 
-Do not suggest unrelated refactors in the middle of a feature fix.
-Always prefer atomic commits.
+Rules:
+- atomic commits
+- no unrelated refactors
+- keep history clean
 
 ## Current stack
+
+### Backend
 - .NET 10
 - ASP.NET Core Web API
-- Entity Framework Core
-- PostgreSQL
+- Entity Framework Core 10
+- PostgreSQL 16
 - Docker Compose
 - Swagger/OpenAPI
+- xUnit
+- FluentAssertions
+
+### Frontend (planned)
+- React
+- Vite
+- TailwindCSS
 
 ## Definition of useful help
 Useful help must:
-- solve the concrete problem
+- solve the real problem
 - preserve architecture
 - keep the project buildable
 - avoid overengineering

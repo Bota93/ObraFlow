@@ -1,6 +1,18 @@
-# Build artifacts
+#######################################
+# .NET
+#######################################
 **/bin/
 **/obj/
+*.user
+*.suo
+*.userprefs
+
+# NuGet
+.nuget/
+packages/
+*.nupkg
+
+# Test / coverage
 TestResults/
 **/TestResults/
 coverage/
@@ -8,24 +20,65 @@ coverage/
 *.coverage
 *.coveragexml
 
-# IDE / editor
+#######################################
+# Frontend (React / Vite / Next)
+#######################################
+**/node_modules/
+**/dist/
+**/.next/
+**/.vite/
+**/.turbo/
+**/build/
+
+#######################################
+# Environment variables
+#######################################
+.env
+.env.*
+!.env.example
+
+#######################################
+# Logs
+#######################################
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+#######################################
+# IDE / Editor
+#######################################
 .vs/
 .vscode/
 .idea/
-*.user
-*.suo
 
-# Temp files
-.tmp/
-*.tmp
-*.log
-
-# OS files
+#######################################
+# OS
+#######################################
 .DS_Store
 Thumbs.db
 
-# Environment
-.env
-.env.*
+#######################################
+# Temp / misc
+#######################################
+.tmp/
+*.tmp
 
+#######################################
+# Docker
+#######################################
+docker-compose.override.yml
+
+#######################################
+# Monorepo specific
+#######################################
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+
+#######################################
+# Dotnet local tools
+#######################################
 /.dotnet/

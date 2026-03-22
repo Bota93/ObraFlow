@@ -1,168 +1,181 @@
 # ObraFlow
 
-ObraFlow is a portfolio-ready construction site management backend built with ASP.NET Core, Entity Framework Core, PostgreSQL, Docker Compose, and a strict layered architecture.
+ObraFlow is a construction site management backend designed to replace manual workflows such as paper, spreadsheets, and WhatsApp with a structured, scalable digital system.
 
-The repository already includes working MVP slices for `Workers`, `DailyReports`, and `Incidents`, plus persistence support for `Materials`. The project is structured to stay buildable, easy to extend, and aligned with the architectural rules in `AGENTS.md`.
+This project is built as a production-style backend with clean architecture, real persistence, integration tests, and a monorepo structure ready for a frontend application.
 
-## Features
+---
 
-- Workers management (CRUD)
-- Daily reports tracking
-- Incident management
-- Dashboard summary with aggregated metrics
-- Integration tests with isolated test database
-- Dockerized environment with PostgreSQL
+## Problem
 
-## Current Stack
+Construction teams still operate with fragmented tools:
+
+- Work reports on paper
+- Incidents tracked informally
+- Workers managed without centralized systems
+
+This leads to:
+
+- Loss of information
+- Lack of traceability
+- Inefficient coordination
+
+---
+
+## Solution
+
+ObraFlow provides a backend system to manage:
+
+- Workers
+- Daily work reports
+- Incidents tracking
+- Operational metrics through a dashboard
+
+Everything is exposed through a clean REST API ready to be consumed by a frontend, with React planned for the next stage.
+
+---
+
+## Architecture
+
+The backend follows a strict layered architecture:
+
+- Domain: entities and business rules
+- Application: use cases and DTOs
+- Infrastructure: EF Core, PostgreSQL, persistence
+- API: controllers, HTTP layer, Swagger
+
+No shortcuts. No mixed responsibilities.
+
+---
+
+## Repository Structure
+
+```text
+backend/
+├── src/        # .NET solution (Domain, Application, Infrastructure, API)
+├── tests/      # Integration tests
+├── docs/       # Technical documentation
+├── docker-compose.yml
+└── ObraFlow.slnx
+
+frontend/
+└── (planned React app)
+```
+
+---
+
+## Tech Stack
+
+### Backend
 
 - .NET 10
 - ASP.NET Core Web API
-- Entity Framework Core 10
-- PostgreSQL 16
+- Entity Framework Core
+- PostgreSQL
 - Docker Compose
-- Swagger / OpenAPI
-- xUnit + FluentAssertions integration tests
+- xUnit + FluentAssertions
 
-## Solution Structure
+### Frontend (planned)
 
-```text
-src/
-├── ObraFlow.Api
-├── ObraFlow.Application
-├── ObraFlow.Domain
-└── ObraFlow.Infrastructure
+- React
+- Vite
+- TailwindCSS
 
-tests/
-└── ObraFlow.Api.IntegrationTests
-```
+---
 
-## Layer Responsibilities
+## Features
 
-- `ObraFlow.Domain`: entities and enums only
-- `ObraFlow.Application`: DTOs and service contracts
-- `ObraFlow.Infrastructure`: EF Core, PostgreSQL, entity configurations, migrations, service implementations, seed data
-- `ObraFlow.Api`: controllers, HTTP pipeline, Swagger, DI, runtime configuration
+### Workers
 
-## MVP Coverage
+- CRUD operations
+- Validation and persistence
+- Integration tested
 
-Implemented vertical slices:
+### Daily Reports
 
-- Workers
-- DailyReports
-- Incidents
+- Track work per worker and day
+- Business validation for hours and descriptions
+- Linked to workers
 
-Implemented at persistence level only:
+### Incidents
 
-- Materials
+- Lifecycle: Open -> In Progress -> Resolved
+- Structured tracking instead of informal communication
 
-## Current Status
+### Dashboard
 
-Already implemented:
+- Aggregated operational data
+- Worker stats
+- Incident distribution
+- Activity metrics
 
-- layered solution and project references
-- PostgreSQL `AppDbContext`
-- entity configurations for all MVP entities
-- migrations under `Infrastructure/Persistence/Migrations`
-- coherent seed data for workers, daily reports, and incidents
-- closed MVP modules for `Workers`, `DailyReports`, and `Incidents`
-- CRUD endpoints for `Workers`, `DailyReports`, and `Incidents`
-- `GET /dashboard/summary`
-- application DTOs and service contracts for `Workers`, `DailyReports`, `Incidents`, and `Dashboard`
-- infrastructure service implementations for `Workers`, `DailyReports`, `Incidents`, and `Dashboard`
-- Swagger/OpenAPI
-- Docker Compose for API + PostgreSQL
-- API integration tests for `Workers`, `DailyReports`, `Incidents`, and `Dashboard`
+---
 
-Still pending:
+## Testing
 
-- Materials application module and HTTP endpoints
-- centralized exception middleware
-- a shared API error contract beyond default validation responses
-- broader test coverage at infrastructure and application levels
-- authentication and authorization
+- Integration tests using `WebApplicationFactory`
+- Isolated database per test run
+- Real HTTP-level validation, not just unit tests
 
-## Quick Start
-
-### Run With Docker Compose
+Run tests:
 
 ```bash
-docker compose up --build
+dotnet test backend/tests/ObraFlow.Api.IntegrationTests
 ```
 
-Services:
+---
 
-- API: `http://localhost:5000`
-- Swagger UI: `http://localhost:5000/swagger`
-- PostgreSQL: `localhost:5432`
+## Running The Project
 
-Default Docker database credentials:
-
-- Database: `obraflowdb`
-- Username: `postgres`
-- Password: `postgres`
-
-### Run Locally
-
-1. Start PostgreSQL.
-2. Check the connection string in `src/ObraFlow.Api/appsettings.json`.
-3. Apply migrations if needed.
-4. Run the API:
+### With Docker
 
 ```bash
-dotnet run --project src/ObraFlow.Api/ObraFlow.Api.csproj
+docker compose -f backend/docker-compose.yml up --build
 ```
 
-## Common Commands
-
-Build the solution:
+### Without Docker
 
 ```bash
-dotnet build ObraFlow.slnx
+dotnet run --project backend/src/ObraFlow.Api
 ```
 
-Run API integration tests:
-
-```bash
-dotnet test tests/ObraFlow.Api.IntegrationTests/ObraFlow.Api.IntegrationTests.csproj
-```
-
-Apply migrations:
-
-```bash
-dotnet ef database update --project src/ObraFlow.Infrastructure --startup-project src/ObraFlow.Api
-```
-
-Add a migration:
-
-```bash
-dotnet ef migrations add <MigrationName> --project src/ObraFlow.Infrastructure --startup-project src/ObraFlow.Api
-```
-
-## API Surface
-
-Current routes:
-
-- `/dashboard/summary`
-- `/workers`
-- `/daily-reports`
-- `/incidents`
-
-`/dashboard/summary` exposes `GET`.
-
-`/workers`, `/daily-reports`, and `/incidents` expose `GET`, `GET by id`, `POST`, `PUT`, and `DELETE`.
-
-For concrete examples, see `docs/api-reference.md`.
+---
 
 ## Documentation
 
-Start here:
+- Backend overview: `backend/README.md`
+- Docs index: `backend/docs/index.md`
+- Contributing: `backend/docs/contributing.md`
 
-- `docs/index.md`
-- `docs/architecture.md`
-- `docs/project-status.md`
-- `docs/setup-and-operations.md`
-- `docs/api-reference.md`
+---
 
-## Portfolio Notes
+## Why This Project Matters
 
-ObraFlow is already more than a scaffold: it demonstrates clean boundaries, EF Core persistence, containerized runtime, tested HTTP endpoints, and a controlled path for adding the remaining module work without collapsing the architecture.
+This is not a tutorial project.
+
+It is designed to demonstrate:
+
+- Real backend architecture decisions
+- Clean separation of concerns
+- Production-like setup with database, Docker, and tests
+- Ability to scale into a full product with a SaaS-ready base
+
+---
+
+## Status
+
+Backend MVP complete:
+
+- Workers: complete
+- DailyReports: complete
+- Incidents: complete
+- Dashboard: complete
+
+Frontend: planned with React.
+
+---
+
+## Author
+
+Adrián Alcaraz  
+Junior Software Developer focused on building real-world systems with solid architecture and scalability in mind.

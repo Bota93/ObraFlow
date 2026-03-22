@@ -1,5 +1,7 @@
 # Setup And Operations
 
+All commands below assume the current directory is `backend/`. If you are at the repository root, run `cd backend` first or prefix the paths with `backend/`.
+
 ## Prerequisites
 
 To work on ObraFlow locally, install:
@@ -50,7 +52,7 @@ Host=localhost;Port=5432;Database=obraflowdb;Username=postgres;Password=postgres
 
 ### Docker Compose Connection String
 
-`docker-compose.yml` overrides the connection string using:
+`docker-compose.yml` in `backend/` overrides the connection string using:
 
 ```text
 Host=db;Port=5432;Database=obraflowdb;Username=postgres;Password=postgres

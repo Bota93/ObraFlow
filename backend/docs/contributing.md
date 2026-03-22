@@ -58,7 +58,7 @@ When implementing a new module or expanding an existing one, the preferred seque
 5. Add migration if the database model changes.
 6. Update documentation.
 
-For endpoint changes, also update `docs/api-reference.md`.
+For endpoint changes, also update `api-reference.md`.
 
 ## Pull Request Expectations
 
@@ -84,9 +84,9 @@ Reviewers should verify:
 
 For a new contributor:
 
-1. Read `README.md`.
-2. Read `docs/index.md`.
-3. Read `docs/architecture.md`.
+1. Read `../README.md`.
+2. Read `index.md`.
+3. Read `architecture.md`.
 4. Start the stack with Docker Compose or local PostgreSQL.
 5. Review the current migration and entity configurations.
 6. Pick one isolated module slice before touching multiple layers.
@@ -99,4 +99,4 @@ Current recommended first issues:
 
 ## Documentation Rule
 
-If you change architecture, runtime behavior, or contributor workflow, update the relevant document in `docs/` in the same branch.
+If you change architecture, runtime behavior, or contributor workflow, update the relevant document in this folder in the same branch.

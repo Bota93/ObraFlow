@@ -1,5 +1,7 @@
 # Database
 
+All commands below assume the current directory is `backend/`. If you are at the repository root, run `cd backend` first or prefix the paths with `backend/`.
+
 ## Provider
 
 ObraFlow uses PostgreSQL through the `Npgsql.EntityFrameworkCore.PostgreSQL` provider.
