@@ -2,7 +2,7 @@
 
 ObraFlow is a construction site management system designed to replace manual workflows such as paper, spreadsheets, and WhatsApp with a structured, scalable digital platform.
 
-This project is built as a monorepo with a production-style backend, real persistence, integration tests, and a frontend portfolio application that consumes the API.
+This project is built as a monorepo with a production-style backend, real persistence, integration tests, Docker support, and a frontend portfolio application that consumes the API.
 
 ---
 
@@ -24,12 +24,13 @@ This leads to:
 
 ## Solution
 
-ObraFlow provides a backend system to manage:
+ObraFlow provides a backend and frontend foundation to manage:
 
 - Workers
 - Daily work reports
 - Incidents tracking
 - Operational metrics through a dashboard
+- a portfolio-ready frontend consuming live API data
 
 Everything is exposed through a clean REST API and consumed by a React frontend organized around the main product workflows.
 
@@ -45,6 +46,20 @@ The backend follows a strict layered architecture:
 - API: controllers, HTTP layer, Swagger
 
 No shortcuts. No mixed responsibilities.
+
+The frontend stays isolated in its own workspace and consumes the backend API without duplicating backend business logic.
+
+---
+
+## Validation Status
+
+The project has been validated with:
+
+- `dotnet build`
+- `dotnet test`
+- `dotnet run --project backend/src/ObraFlow.Api`
+- `docker compose -f backend/docker-compose.yml up --build`
+- successful frontend-to-backend communication
 
 ---
 
@@ -92,6 +107,17 @@ frontend/
 - Dashboard overview connected to the backend summary endpoint
 - Workers, daily reports, and incidents views connected to API data
 - Feature-oriented React structure with shared HTTP client and routing
+
+### Backend Modules
+
+- Workers
+- DailyReports
+- Incidents
+- Dashboard
+
+### Persistence Present But Not Yet Exposed End-To-End
+
+- Materials
 
 ### Workers
 
@@ -141,11 +167,33 @@ dotnet test backend/tests/ObraFlow.Api.IntegrationTests
 docker compose -f backend/docker-compose.yml up --build
 ```
 
-### Without Docker
+Backend URLs with Docker:
+
+- API: `http://localhost:5000`
+- Swagger: `http://localhost:5000/swagger`
+
+### Backend Without Docker
 
 ```bash
 dotnet run --project backend/src/ObraFlow.Api
 ```
+
+Backend URLs in local development:
+
+- API: `http://localhost:5250`
+- Swagger: `http://localhost:5250/swagger`
+
+### Frontend
+
+```bash
+cd frontend
+pnpm install
+pnpm dev
+```
+
+Default frontend dev URL:
+
+- App: `http://localhost:5173`
 
 ---
 
@@ -190,9 +238,10 @@ Frontend MVP available:
 
 Still pending:
 
+- Materials end-to-end module through Application and API
 - richer workflows beyond read-focused portfolio views
 - create and update forms
-- future documentation updates as the frontend evolves
+- additional frontend polish for product workflows
 
 ---
 
