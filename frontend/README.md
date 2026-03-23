@@ -2,7 +2,7 @@
 
 Frontend workspace for ObraFlow, a construction site management system.
 
-The frontend is planned as a React application that will consume the backend API for the main product workflows:
+The frontend is a React application that consumes the backend API for the main product workflows:
 - dashboard
 - workers
 - daily reports
@@ -10,9 +10,16 @@ The frontend is planned as a React application that will consume the backend API
 
 ## Status
 
-Frontend foundation is now initialized with Vite, React, and TypeScript.
+Frontend foundation is implemented with Vite, React, and TypeScript.
 
-The current goal of this workspace is to evolve that base into the planned application structure without breaking the documented architecture.
+The current workspace already includes:
+
+- application layouts and router
+- shared HTTP client and environment configuration
+- dashboard data integration
+- workers, daily reports, and incidents data views
+
+The next goal is to evolve this MVP without breaking the documented architecture.
 
 ## Documentation
 

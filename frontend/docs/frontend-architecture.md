@@ -14,9 +14,17 @@ This is a working document, not theoretical documentation.
 
 ## Current Status
 
-The frontend workspace has been initialized with a base Vite + React + TypeScript setup.
+The frontend workspace is no longer just initialized.
 
-The feature architecture described in this document is still the target structure and should guide the next implementation steps as the codebase evolves.
+It already includes:
+- Vite + React + TypeScript
+- feature-oriented folder structure
+- React Router with app and public layouts
+- TanStack Query provider setup
+- centralized Axios client
+- dashboard, workers, daily reports, and incidents views connected to the backend API
+
+The feature architecture described in this document remains the target shape for the next iterations as the codebase evolves.
 
 ## Planned Tech Stack
 
@@ -231,10 +239,10 @@ Avoid:
 Planned environment variable:
 
 ```env
-VITE_API_BASE_URL=http://localhost:5000
+VITE_API_BASE_URL=http://localhost:5250
 ```
 
-This value is provisional and should match the real backend configuration when the frontend setup is created.
+This should match the backend local development URL from `launchSettings.json`. When running through Docker Compose, the exposed API URL is `http://localhost:5000`.
 
 All requests should go through a centralized API client.
 
@@ -256,10 +264,14 @@ All requests should go through a centralized API client.
 - Layout
 - API client
 
+Status: completed
+
 ### Phase 2 - Dashboard
 
 - integrate dashboard summary endpoint
 - build metrics view
+
+Status: implemented as a read-focused MVP view
 
 ### Phase 3 - Workers
 
@@ -267,17 +279,23 @@ All requests should go through a centralized API client.
 - detail
 - create
 
+Status: list-style API view implemented, detail and create still pending
+
 ### Phase 4 - Daily Reports
 
 - list
 - detail
 - create
 
+Status: list-style API view implemented, detail and create still pending
+
 ### Phase 5 - Incidents
 
 - list
 - detail
 - create or update
+
+Status: list-style API view implemented, detail/create/update still pending
 
 ### Phase 6 - Polish
 

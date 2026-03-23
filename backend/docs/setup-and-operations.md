@@ -40,6 +40,12 @@ If PostgreSQL is already available on your machine:
 dotnet run --project src/ObraFlow.Api/ObraFlow.Api.csproj
 ```
 
+Useful local URLs:
+
+- API base URL: `http://localhost:5250`
+- HTTPS API: `https://localhost:7129`
+- Swagger UI: `http://localhost:5250/swagger`
+
 ## Configuration
 
 ### Local Default Connection String

@@ -114,6 +114,12 @@ Default Docker database credentials:
 dotnet run --project src/ObraFlow.Api/ObraFlow.Api.csproj
 ```
 
+By default, local development uses:
+
+- API: `http://localhost:5250`
+- HTTPS API: `https://localhost:7129`
+- Swagger UI: `http://localhost:5250/swagger`
+
 ## Common Commands
 
 Build the solution:

@@ -1,8 +1,8 @@
 # ObraFlow
 
-ObraFlow is a construction site management backend designed to replace manual workflows such as paper, spreadsheets, and WhatsApp with a structured, scalable digital system.
+ObraFlow is a construction site management system designed to replace manual workflows such as paper, spreadsheets, and WhatsApp with a structured, scalable digital platform.
 
-This project is built as a production-style backend with clean architecture, real persistence, integration tests, and a monorepo structure ready for a frontend application.
+This project is built as a monorepo with a production-style backend, real persistence, integration tests, and a frontend portfolio application that consumes the API.
 
 ---
 
@@ -31,7 +31,7 @@ ObraFlow provides a backend system to manage:
 - Incidents tracking
 - Operational metrics through a dashboard
 
-Everything is exposed through a clean REST API ready to be consumed by a frontend, with React planned for the next stage.
+Everything is exposed through a clean REST API and consumed by a React frontend organized around the main product workflows.
 
 ---
 
@@ -59,7 +59,7 @@ backend/
 └── ObraFlow.slnx
 
 frontend/
-└── (planned React app)
+└── React application consuming the backend API
 ```
 
 ---
@@ -75,15 +75,23 @@ frontend/
 - Docker Compose
 - xUnit + FluentAssertions
 
-### Frontend (planned)
+### Frontend
 
 - React
 - Vite
 - TailwindCSS
+- TanStack Query
+- Axios
 
 ---
 
 ## Features
+
+### Frontend Portfolio App
+
+- Dashboard overview connected to the backend summary endpoint
+- Workers, daily reports, and incidents views connected to API data
+- Feature-oriented React structure with shared HTTP client and routing
 
 ### Workers
 
@@ -171,7 +179,18 @@ Backend MVP complete:
 - Incidents: complete
 - Dashboard: complete
 
-Frontend: planned with React.
+Frontend MVP available:
+
+- Dashboard connected to API
+- Workers connected to API
+- DailyReports connected to API
+- Incidents connected to API
+
+Still pending:
+
+- richer workflows beyond read-focused portfolio views
+- create and update forms
+- future documentation updates as the frontend evolves
 
 ---
 
