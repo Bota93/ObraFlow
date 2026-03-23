@@ -1,4 +1,4 @@
-import { DashboardOverview } from '../../features/dashboard/components/dashboard-overview'
+import { DashboardMetrics } from '../../features/dashboard/components/dashboard-metrics'
 import { PageHeader } from '../../shared/components/page-header'
 
 export function DashboardPage() {
@@ -7,9 +7,9 @@ export function DashboardPage() {
       <PageHeader
         eyebrow="Dashboard"
         title="Site activity overview"
-        description="Initial route scaffold for summary metrics and quick operational visibility."
+        description="Operational summary metrics loaded from the backend API."
       />
-      <DashboardOverview />
+      <DashboardMetrics />
     </div>
   )
 }

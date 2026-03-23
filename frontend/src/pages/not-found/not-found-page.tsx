@@ -9,7 +9,7 @@ export function NotFoundPage() {
         </p>
         <h1 className="text-3xl font-semibold tracking-tight">Page not found</h1>
         <p className="text-sm leading-6 text-slate-300">
-          The requested route does not exist in the ObraFlow frontend scaffold.
+          The requested route does not exist in the ObraFlow application.
         </p>
         <Link
           to="/dashboard"

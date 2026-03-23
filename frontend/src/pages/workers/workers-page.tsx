@@ -1,4 +1,4 @@
-import { WorkersPlaceholder } from '../../features/workers/components/workers-placeholder'
+import { WorkersTable } from '../../features/workers/components/workers-table'
 import { PageHeader } from '../../shared/components/page-header'
 
 export function WorkersPage() {
@@ -7,9 +7,9 @@ export function WorkersPage() {
       <PageHeader
         eyebrow="Workers"
         title="Workforce management"
-        description="Page composition is ready for worker list, detail, and create use cases."
+        description="Current workforce data pulled from the backend API."
       />
-      <WorkersPlaceholder />
+      <WorkersTable />
     </div>
   )
 }

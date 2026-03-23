@@ -1,6 +1,6 @@
 import { useDashboardSummary } from '../hooks/use-dashboard-summary'
 
-export function DashboardOverview() {
+export function DashboardMetrics() {
   const { data, isLoading, isError } = useDashboardSummary()
 
   if (isLoading) {

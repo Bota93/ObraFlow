@@ -1,4 +1,4 @@
-import { IncidentsPlaceholder } from '../../features/incidents/components/incidents-placeholder'
+import { IncidentsFeed } from '../../features/incidents/components/incidents-feed'
 import { PageHeader } from '../../shared/components/page-header'
 
 export function IncidentsPage() {
@@ -7,9 +7,9 @@ export function IncidentsPage() {
       <PageHeader
         eyebrow="Incidents"
         title="Incident tracking"
-        description="Thin page wrapper prepared for incident list, detail, and update flows."
+        description="Recent incident activity loaded from the backend API."
       />
-      <IncidentsPlaceholder />
+      <IncidentsFeed />
     </div>
   )
 }

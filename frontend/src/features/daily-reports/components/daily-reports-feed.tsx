@@ -1,6 +1,6 @@
 import { useDailyReports } from '../hooks/use-daily-reports'
 
-export function DailyReportsPlaceholder() {
+export function DailyReportsFeed() {
   const { data, isLoading, isError } = useDailyReports()
 
   if (isLoading) {

@@ -24,7 +24,7 @@ This leads to:
 
 ## Solution
 
-ObraFlow provides a backend and frontend foundation to manage:
+ObraFlow provides a backend and frontend platform to manage:
 
 - Workers
 - Daily work reports
@@ -214,7 +214,7 @@ It is designed to demonstrate:
 - Real backend architecture decisions
 - Clean separation of concerns
 - Production-like setup with database, Docker, and tests
-- Ability to scale into a full product with a SaaS-ready base
+- Ability to scale into a full product with a SaaS-ready architecture
 
 ---
 

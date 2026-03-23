@@ -6,7 +6,7 @@ const statusLabels: Record<number, string> = {
   3: 'Resolved',
 }
 
-export function IncidentsPlaceholder() {
+export function IncidentsFeed() {
   const { data, isLoading, isError } = useIncidents()
 
   if (isLoading) {

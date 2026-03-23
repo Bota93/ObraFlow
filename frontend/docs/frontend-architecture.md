@@ -14,7 +14,7 @@ This is a working document, not theoretical documentation.
 
 ## Current Status
 
-The frontend workspace is no longer just initialized.
+The frontend workspace already has an implemented MVP structure.
 
 It already includes:
 - Vite + React + TypeScript
@@ -24,7 +24,7 @@ It already includes:
 - centralized Axios client
 - dashboard, workers, daily reports, and incidents views connected to the backend API
 
-The feature architecture described in this document remains the target shape for the next iterations as the codebase evolves.
+The feature architecture described in this document remains the reference shape for the next iterations as the codebase evolves.
 
 ## Planned Tech Stack
 
@@ -135,7 +135,7 @@ Features should stay isolated and cohesive.
 
 Reusable and cross-cutting code:
 - API client
-- base UI components
+- reusable UI components
 - utilities
 - configuration
 - constants
@@ -309,7 +309,7 @@ Status: list-style API view implemented, detail/create/update still pending
 Codex is an assistant, not an architect.
 
 Use Codex for:
-- scaffolding
+- implementation support
 - repetitive code
 - small refactors
 

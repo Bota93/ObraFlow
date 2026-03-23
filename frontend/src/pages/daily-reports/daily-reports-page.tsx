@@ -1,4 +1,4 @@
-import { DailyReportsPlaceholder } from '../../features/daily-reports/components/daily-reports-placeholder'
+import { DailyReportsFeed } from '../../features/daily-reports/components/daily-reports-feed'
 import { PageHeader } from '../../shared/components/page-header'
 
 export function DailyReportsPage() {
@@ -7,9 +7,9 @@ export function DailyReportsPage() {
       <PageHeader
         eyebrow="Daily Reports"
         title="Daily site reporting"
-        description="Route-level composition for report listing, details, and future creation workflows."
+        description="Recent site reports loaded from the backend API."
       />
-      <DailyReportsPlaceholder />
+      <DailyReportsFeed />
     </div>
   )
 }

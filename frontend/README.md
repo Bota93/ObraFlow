@@ -10,7 +10,7 @@ The frontend is a React application that consumes the backend API for the main p
 
 ## Status
 
-Frontend foundation is implemented with Vite, React, and TypeScript.
+The frontend application is implemented with Vite, React, and TypeScript.
 
 The current workspace already includes:
 

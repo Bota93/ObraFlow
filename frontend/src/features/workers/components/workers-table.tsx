@@ -1,6 +1,6 @@
 import { useWorkers } from '../hooks/use-workers'
 
-export function WorkersPlaceholder() {
+export function WorkersTable() {
   const { data, isLoading, isError } = useWorkers()
 
   if (isLoading) {
