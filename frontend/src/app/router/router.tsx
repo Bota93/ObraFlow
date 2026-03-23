@@ -5,6 +5,7 @@ import { DashboardPage } from '../../pages/dashboard/dashboard-page'
 import { DailyReportsPage } from '../../pages/daily-reports/daily-reports-page'
 import { IncidentsPage } from '../../pages/incidents/incidents-page'
 import { NotFoundPage } from '../../pages/not-found/not-found-page'
+import { CreateWorkerPage } from '../../pages/workers/create-worker-page'
 import { WorkersPage } from '../../pages/workers/workers-page'
 
 export const router = createBrowserRouter([
@@ -27,6 +28,10 @@ export const router = createBrowserRouter([
       {
         path: '/workers',
         element: <WorkersPage />,
+      },
+      {
+        path: '/workers/new',
+        element: <CreateWorkerPage />,
       },
       {
         path: '/daily-reports',
