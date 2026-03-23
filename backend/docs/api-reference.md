@@ -11,6 +11,11 @@ Current implemented HTTP resources:
 
 Base URL examples in local development:
 
+- `http://localhost:5250`
+- `http://localhost:5250/swagger`
+
+When running through Docker Compose, the API is exposed on:
+
 - `http://localhost:5000`
 - `http://localhost:5000/swagger`
 
