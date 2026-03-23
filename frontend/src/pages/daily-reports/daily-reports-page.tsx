@@ -7,7 +7,7 @@ export function DailyReportsPage() {
       <PageHeader
         eyebrow="Daily Reports"
         title="Daily site reporting"
-        description="Recent site reports loaded from the backend API."
+        description="Recent field reports covering site activity, workers, and hours logged."
       />
       <DailyReportsFeed />
     </div>

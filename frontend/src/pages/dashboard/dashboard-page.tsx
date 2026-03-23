@@ -7,7 +7,7 @@ export function DashboardPage() {
       <PageHeader
         eyebrow="Dashboard"
         title="Site activity overview"
-        description="Operational summary metrics loaded from the backend API."
+        description="Operational summary for workforce activity, reporting, and incident status."
       />
       <DashboardMetrics />
     </div>

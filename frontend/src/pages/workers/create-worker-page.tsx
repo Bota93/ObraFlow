@@ -7,7 +7,7 @@ export function CreateWorkerPage() {
       <PageHeader
         eyebrow="Workers"
         title="Create worker"
-        description="Add a worker to the workforce register used by the backend API."
+        description="Add a new worker to the project workforce register."
       />
       <CreateWorkerForm />
     </div>

@@ -109,8 +109,14 @@ export function DailyReportsFeed() {
                 </p>
                 <p className="text-sm text-slate-600">{report.description}</p>
               </div>
-              <div className="text-sm text-slate-500">
+              <div className="rounded-xl bg-white px-3 py-2 text-sm text-slate-500 shadow-sm">
+                <p className="text-[11px] font-medium uppercase tracking-[0.12em] text-slate-400">
+                  Report date
+                </p>
                 <p>{formatReportDate(report.date)}</p>
+                <p className="mt-2 text-[11px] font-medium uppercase tracking-[0.12em] text-slate-400">
+                  Hours worked
+                </p>
                 <p>{formatHoursWorked(report.hoursWorked)} h</p>
               </div>
             </div>

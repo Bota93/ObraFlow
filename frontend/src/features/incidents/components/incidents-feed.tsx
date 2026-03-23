@@ -112,10 +112,13 @@ export function IncidentsFeed() {
                   {incident.description}
                 </p>
               </div>
-              <div className="space-y-2 text-right">
+              <div className="rounded-xl bg-white px-3 py-2 text-right shadow-sm">
                 <span className="inline-flex rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">
                   {statusLabels[incident.status] ?? 'Unknown'}
                 </span>
+                <p className="mt-2 text-[11px] font-medium uppercase tracking-[0.12em] text-slate-400">
+                  Reported
+                </p>
                 <p className="text-xs text-slate-500">
                   {formatReportedAt(incident.reportedAtUtc)}
                 </p>

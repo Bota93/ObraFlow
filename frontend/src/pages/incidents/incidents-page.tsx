@@ -7,7 +7,7 @@ export function IncidentsPage() {
       <PageHeader
         eyebrow="Incidents"
         title="Incident tracking"
-        description="Recent incident activity loaded from the backend API."
+        description="Recent site incidents with status and reporting history."
       />
       <IncidentsFeed />
     </div>

@@ -43,10 +43,10 @@ export function AppLayout() {
           <header className="border-b border-slate-200 bg-white/90 px-6 py-4 backdrop-blur lg:px-10">
             <div className="flex flex-col gap-1">
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
-                Frontend MVP
+                Operations workspace
               </p>
               <p className="text-sm text-slate-600">
-                Operational views connected to the backend modules.
+                Construction reporting, workforce, and incident visibility.
               </p>
             </div>
           </header>

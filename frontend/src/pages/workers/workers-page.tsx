@@ -9,11 +9,12 @@ export function WorkersPage() {
         <PageHeader
           eyebrow="Workers"
           title="Workforce management"
-          description="Current workforce data pulled from the backend API."
+          description="Current workforce across the project, including roles, contact data, and status."
         />
         <Link
           to="/workers/new"
-          className="inline-flex items-center justify-center rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
+          style={{ color: '#ffffff' }}
+          className="inline-flex items-center justify-center rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 hover:text-white visited:text-white"
         >
           Create worker
         </Link>
