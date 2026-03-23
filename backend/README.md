@@ -72,6 +72,7 @@ Already implemented:
 - Swagger/OpenAPI
 - Docker Compose for API + PostgreSQL
 - API integration tests for `Workers`, `DailyReports`, `Incidents`, and `Dashboard`
+- verified local workflow with `dotnet build`, `dotnet test`, `dotnet run`, and Docker Compose
 
 Still pending:
 

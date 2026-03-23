@@ -178,6 +178,7 @@ Backend MVP complete:
 - DailyReports: complete
 - Incidents: complete
 - Dashboard: complete
+- validated with `dotnet build`, `dotnet test`, local runtime, and Docker Compose
 
 Frontend MVP available:
 
@@ -185,6 +186,7 @@ Frontend MVP available:
 - Workers connected to API
 - DailyReports connected to API
 - Incidents connected to API
+- validated with successful frontend/backend communication against the API
 
 Still pending:
 

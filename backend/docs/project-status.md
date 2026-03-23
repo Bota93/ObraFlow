@@ -15,6 +15,7 @@ The solution already demonstrates:
 - a working dashboard summary endpoint
 - coherent seed data for realistic API responses
 - API integration tests
+- verified local build, test, runtime, and Docker workflow
 
 ## What Exists Today
 
@@ -95,5 +96,6 @@ In its current form, ObraFlow is best presented as:
 - a layered backend MVP with implemented CRUD slices
 - a persistence-focused .NET project with tested HTTP coverage
 - an architecture-first API with one remaining MVP module pending
+- a portfolio project validated in build, automated tests, local runtime, Docker, and frontend-to-backend communication
 
 That is a valid and professional stage, as long as the documentation clearly distinguishes what is already built from what is planned.
