@@ -5,7 +5,7 @@ Build ObraFlow as a serious portfolio project and product-ready system for const
 
 The repository must support:
 - a production-style backend
-- a future frontend application
+- a frontend application consuming the backend API
 - clean evolution without mixing responsibilities across workspaces
 
 ## Product context
@@ -39,7 +39,7 @@ This repository is organized as a monorepo:
   - tests
 
 - `frontend/`
-  - frontend application (React planned)
+  - frontend application
   - UI layer consuming backend API
 
 ## Monorepo rules
@@ -91,8 +91,10 @@ The backend is split into four projects:
 - Integration tests cover the implemented API modules
 
 ### Frontend
-- planned
-- not yet implemented
+- React frontend MVP implemented
+- Dashboard, Workers, Daily Reports, and Incidents connected to backend API
+- `Create Worker` implemented through a dedicated frontend route and form
+- frontend remains provisional and should continue evolving without driving backend architecture changes
 
 ## Frontend direction
 Frontend must:
@@ -181,10 +183,14 @@ Rules:
 - xUnit
 - FluentAssertions
 
-### Frontend (planned)
+### Frontend
 - React
 - Vite
 - TailwindCSS
+- TanStack Query
+- Axios
+- React Hook Form
+- Zod
 
 ## Definition of useful help
 Useful help must:

@@ -97,6 +97,8 @@ frontend/
 - TailwindCSS
 - TanStack Query
 - Axios
+- React Hook Form
+- Zod
 
 ---
 
@@ -106,6 +108,7 @@ frontend/
 
 - Dashboard overview connected to the backend summary endpoint
 - Workers, daily reports, and incidents views connected to API data
+- Create Worker flow implemented with dedicated route and validated form
 - Feature-oriented React structure with shared HTTP client and routing
 
 ### Backend Modules
@@ -232,6 +235,7 @@ Frontend MVP available:
 
 - Dashboard connected to API
 - Workers connected to API
+- Create Worker route and form connected to API
 - DailyReports connected to API
 - Incidents connected to API
 - validated with successful frontend/backend communication against the API
@@ -240,7 +244,7 @@ Still pending:
 
 - Materials end-to-end module through Application and API
 - richer workflows beyond read-focused portfolio views
-- create and update forms
+- additional create and update forms beyond workers
 - additional frontend polish for product workflows
 
 ---

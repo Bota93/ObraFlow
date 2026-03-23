@@ -18,6 +18,7 @@ The current workspace already includes:
 - shared HTTP client and environment configuration
 - dashboard data integration
 - workers, daily reports, and incidents data views
+- create worker route and validated form flow
 
 The next goal is to evolve this MVP without breaking the documented architecture.
 

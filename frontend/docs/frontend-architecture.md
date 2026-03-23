@@ -23,6 +23,7 @@ It already includes:
 - TanStack Query provider setup
 - centralized Axios client
 - dashboard, workers, daily reports, and incidents views connected to the backend API
+- create worker flow implemented with React Hook Form and Zod
 
 The feature architecture described in this document remains the reference shape for the next iterations as the codebase evolves.
 
@@ -279,7 +280,7 @@ Status: implemented as a read-focused MVP view
 - detail
 - create
 
-Status: list-style API view implemented, detail and create still pending
+Status: list-style API view and create flow implemented, detail still pending
 
 ### Phase 4 - Daily Reports
 
