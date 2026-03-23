@@ -88,7 +88,7 @@ export function DashboardMetrics() {
       accentClass: 'bg-emerald-100 text-emerald-700',
     },
     {
-      label: 'Reports today',
+      label: 'Total reports',
       value: String(data.totalDailyReports),
       accentClass: 'bg-sky-100 text-sky-700',
     },
