@@ -1,12 +1,10 @@
 # ObraFlow
 
-ObraFlow is a construction operations MVP for site management.
-
 ObraFlow is a construction operations MVP designed to simulate real-world site management workflows, including workforce tracking, reporting, incident handling, and operational dashboards.
 
 The project is intentionally built with production-oriented practices such as integration testing, deterministic seed data, and demo environment protection.
 
-It replaces fragmented workflows such as paper-based daily reports, informal incident tracking, and unstructured worker management with a clearer backend and frontend workflow.
+It replaces fragmented workflows such as paper-based reports, informal incident tracking, and unstructured workforce management with a structured digital workflow.
 
 <img src="./docs/screenshots/dashboard.png" alt="ObraFlow dashboard with operational metrics and site visibility" width="900" />
 
@@ -21,12 +19,6 @@ Implemented today:
 - incidents list
 - ASP.NET Core backend with PostgreSQL persistence
 - React frontend consuming the backend API
-
-Planned next steps:
-
-- materials end-to-end module
-- additional create and update flows beyond workers
-- broader product workflows beyond the current MVP views
 
 ## Stack
 
@@ -167,3 +159,5 @@ dotnet run --project backend/src/ObraFlow.Api/ObraFlow.Api.csproj -- reset-demo
 - backend overview: `backend/README.md`
 - backend docs index: `backend/docs/index.md`
 - frontend architecture: `frontend/docs/frontend-architecture.md`
+
+ObraFlow is presented as a portfolio-ready backend and frontend system built with production-oriented practices, not as a demo-only prototype.
