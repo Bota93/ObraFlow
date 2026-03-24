@@ -1,4 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom'
+import { DemoNotice } from '../../shared/components/demo-notice'
 import { navigationItems } from '../../shared/constants/navigation'
 
 export function AppLayout() {
@@ -52,6 +53,9 @@ export function AppLayout() {
           </header>
 
           <main className="flex-1 px-6 py-8 lg:px-10">
+            <div className="mb-6">
+              <DemoNotice />
+            </div>
             <Outlet />
           </main>
         </div>

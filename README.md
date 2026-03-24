@@ -8,23 +8,7 @@ The project is intentionally built with production-oriented practices such as in
 
 It replaces fragmented workflows such as paper-based daily reports, informal incident tracking, and unstructured worker management with a clearer backend and frontend workflow.
 
-## Product Preview
-
-### Dashboard Overview
-
-<img src="docs/screenshots/dashboard-overview.png" alt="ObraFlow dashboard overview" width="900" />
-
-### Workers List
-
-<img src="docs/screenshots/workers-list.png" alt="ObraFlow workers list view" width="900" />
-
-### Create Worker
-
-<img src="docs/screenshots/worker-create-form.png" alt="ObraFlow create worker form" width="900" />
-
-### Operations View
-
-<img src="docs/screenshots/operations-view.png" alt="ObraFlow operations view" width="900" />
+<img src="./docs/screenshots/dashboard.png" alt="ObraFlow dashboard with operational metrics and site visibility" width="900" />
 
 
 ## Current Product Scope
@@ -159,6 +143,24 @@ The demo reset entry point is available through:
 ```bash
 dotnet run --project backend/src/ObraFlow.Api/ObraFlow.Api.csproj -- reset-demo
 ```
+
+## Screenshots
+
+### Operational Dashboard
+
+<img src="./docs/screenshots/dashboard.png" alt="ObraFlow operational dashboard overview" width="900" />
+
+### Workforce Management
+
+<img src="./docs/screenshots/workers.png" alt="ObraFlow workforce management view" width="900" />
+
+### Worker Onboarding Flow
+
+<img src="./docs/screenshots/create-worker.png" alt="ObraFlow create worker form flow" width="900" />
+
+### Incident Tracking
+
+<img src="./docs/screenshots/incidents.png" alt="ObraFlow incident tracking view" width="900" />
 
 ## Docs
 
