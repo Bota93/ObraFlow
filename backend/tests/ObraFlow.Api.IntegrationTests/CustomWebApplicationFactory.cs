@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
@@ -14,6 +15,18 @@ namespace ObraFlow.Api.IntegrationTests;
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
     private DbConnection? _connection;
+
+    public WebApplicationFactory<Program> WithConfigurationOverrides(
+        IReadOnlyDictionary<string, string?> configurationOverrides)
+    {
+        return WithWebHostBuilder(builder =>
+        {
+            builder.ConfigureAppConfiguration((_, configurationBuilder) =>
+            {
+                configurationBuilder.AddInMemoryCollection(configurationOverrides);
+            });
+        });
+    }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {

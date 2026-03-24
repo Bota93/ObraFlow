@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.Mvc;
 using ObraFlow.Application.Abstractions;
 using ObraFlow.Application.DTOs.DailyReports;
@@ -38,8 +39,10 @@ public class DailyReportsController : ControllerBase
     }
 
     [HttpPost]
+    [EnableRateLimiting("DemoCreateWrites")]
     [ProducesResponseType(typeof(DailyReportDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
     public async Task<ActionResult<DailyReportDto>> Create([FromBody] CreateDailyReportDto dto, CancellationToken cancellationToken)
     {
         var createdReport = await _dailyReportService.CreateAsync(dto, cancellationToken);

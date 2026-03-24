@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.Mvc;
 using ObraFlow.Application.Abstractions;
 using ObraFlow.Application.DTOs.Workers;
@@ -38,8 +39,10 @@ public class WorkersController : ControllerBase
     }
 
     [HttpPost]
+    [EnableRateLimiting("DemoCreateWrites")]
     [ProducesResponseType(typeof(WorkerDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
     public async Task<ActionResult<WorkerDto>> Create([FromBody] CreateWorkerDto dto, CancellationToken cancellationToken)
     {
         var createdWorker = await _workerService.CreateAsync(dto, cancellationToken);

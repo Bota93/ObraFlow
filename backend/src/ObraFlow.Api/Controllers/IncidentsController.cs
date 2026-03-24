@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.Mvc;
 using ObraFlow.Application.Abstractions;
 using ObraFlow.Application.DTOs.Incidents;
@@ -38,8 +39,10 @@ public class IncidentsController : ControllerBase
     }
 
     [HttpPost]
+    [EnableRateLimiting("DemoCreateWrites")]
     [ProducesResponseType(typeof(IncidentDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
     public async Task<ActionResult<IncidentDto>> Create([FromBody] CreateIncidentDto dto, CancellationToken cancellationToken)
     {
         var createdIncident = await _incidentService.CreateAsync(dto, cancellationToken);
