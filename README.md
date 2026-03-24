@@ -8,6 +8,25 @@ The project is intentionally built with production-oriented practices such as in
 
 It replaces fragmented workflows such as paper-based daily reports, informal incident tracking, and unstructured worker management with a clearer backend and frontend workflow.
 
+## Product Preview
+
+### Dashboard Overview
+
+<img src="docs/screenshots/dashboard-overview.png" alt="ObraFlow dashboard overview" width="900" />
+
+### Workers List
+
+<img src="docs/screenshots/workers-list.png" alt="ObraFlow workers list view" width="900" />
+
+### Create Worker
+
+<img src="docs/screenshots/worker-create-form.png" alt="ObraFlow create worker form" width="900" />
+
+### Operations View
+
+<img src="docs/screenshots/operations-view.png" alt="ObraFlow operations view" width="900" />
+
+
 ## Current Product Scope
 
 Implemented today:
@@ -19,7 +38,7 @@ Implemented today:
 - ASP.NET Core backend with PostgreSQL persistence
 - React frontend consuming the backend API
 
-Still pending:
+Planned next steps:
 
 - materials end-to-end module
 - additional create and update flows beyond workers
