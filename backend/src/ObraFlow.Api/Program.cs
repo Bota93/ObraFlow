@@ -2,6 +2,7 @@ using System.Text.Json;
 using System.Threading.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.RateLimiting;
+using ObraFlow.Api.Middleware;
 using ObraFlow.Application.Abstractions;
 using ObraFlow.Infrastructure.Persistence;
 using ObraFlow.Infrastructure.Services;
@@ -107,6 +108,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseRouting();
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 app.UseCors(FrontendCorsPolicy);
 app.UseRateLimiter();
 
