@@ -1,187 +1,108 @@
 # ObraFlow
 
-ObraFlow is a construction site management system designed to replace manual workflows such as paper, spreadsheets, and WhatsApp with a structured, scalable digital platform.
+ObraFlow is a construction operations MVP for site management.
 
-This project is built as a monorepo with a production-style backend, real persistence, integration tests, Docker support, and a frontend portfolio application that consumes the API.
+ObraFlow is a construction operations MVP designed to simulate real-world site management workflows, including workforce tracking, reporting, incident handling, and operational dashboards.
 
----
+The project is intentionally built with production-oriented practices such as integration testing, deterministic seed data, and demo environment protection.
 
-## Problem
+It replaces fragmented workflows such as paper-based daily reports, informal incident tracking, and unstructured worker management with a clearer backend and frontend workflow.
 
-Construction teams still operate with fragmented tools:
+## Current Product Scope
 
-- Work reports on paper
-- Incidents tracked informally
-- Workers managed without centralized systems
+Implemented today:
 
-This leads to:
+- dashboard summary connected end-to-end
+- workers list and create flow
+- daily reports list
+- incidents list
+- ASP.NET Core backend with PostgreSQL persistence
+- React frontend consuming the backend API
 
-- Loss of information
-- Lack of traceability
-- Inefficient coordination
+Still pending:
 
----
+- materials end-to-end module
+- additional create and update flows beyond workers
+- broader product workflows beyond the current MVP views
 
-## Solution
-
-ObraFlow provides a backend and frontend platform to manage:
-
-- Workers
-- Daily work reports
-- Incidents tracking
-- Operational metrics through a dashboard
-- a portfolio-ready frontend consuming live API data
-
-Everything is exposed through a clean REST API and consumed by a React frontend organized around the main product workflows.
-
----
-
-## Architecture
-
-The backend follows a strict layered architecture:
-
-- Domain: entities and business rules
-- Application: use cases and DTOs
-- Infrastructure: EF Core, PostgreSQL, persistence
-- API: controllers, HTTP layer, Swagger
-
-No shortcuts. No mixed responsibilities.
-
-The frontend stays isolated in its own workspace and consumes the backend API without duplicating backend business logic.
-
----
-
-## Validation Status
-
-The project has been validated with:
-
-- `dotnet build`
-- `dotnet test`
-- `dotnet run --project backend/src/ObraFlow.Api`
-- `docker compose -f backend/docker-compose.yml up --build`
-- successful frontend-to-backend communication
-
----
-
-## Repository Structure
-
-```text
-backend/
-├── src/        # .NET solution (Domain, Application, Infrastructure, API)
-├── tests/      # Integration tests
-├── docs/       # Technical documentation
-├── docker-compose.yml
-└── ObraFlow.slnx
-
-frontend/
-└── React application consuming the backend API
-```
-
----
-
-## Tech Stack
+## Stack
 
 ### Backend
 
 - .NET 10
 - ASP.NET Core Web API
-- Entity Framework Core
+- Entity Framework Core 10
 - PostgreSQL
-- Docker Compose
 - xUnit + FluentAssertions
 
 ### Frontend
 
 - React
 - Vite
-- TailwindCSS
+- TypeScript
+- Tailwind CSS
 - TanStack Query
 - Axios
 - React Hook Form
 - Zod
 
----
+### Infrastructure
 
-## Features
+- Docker Compose
+- PostgreSQL 16
+- Swagger / OpenAPI
 
-### Frontend Portfolio App
+## Architecture
 
-- Dashboard overview connected to the backend summary endpoint
-- Workers, daily reports, and incidents views connected to API data
-- Create Worker flow implemented with dedicated route and validated form
-- Feature-oriented React structure with shared HTTP client and routing
+The repository is organized as a monorepo:
 
-### Backend Modules
+- `backend/` contains the layered .NET backend
+- `frontend/` contains the React application
 
-- Workers
-- DailyReports
-- Incidents
-- Dashboard
+The backend follows four layers:
 
-### Persistence Present But Not Yet Exposed End-To-End
+- `Domain`: entities and enums
+- `Application`: DTOs and service contracts
+- `Infrastructure`: EF Core, PostgreSQL, migrations, service implementations
+- `Api`: controllers, HTTP pipeline, Swagger, runtime configuration
 
-- Materials
-
-### Workers
-
-- CRUD operations
-- Validation and persistence
-- Integration tested
-
-### Daily Reports
-
-- Track work per worker and day
-- Business validation for hours and descriptions
-- Linked to workers
-
-### Incidents
-
-- Lifecycle: Open -> In Progress -> Resolved
-- Structured tracking instead of informal communication
-
-### Dashboard
-
-- Aggregated operational data
-- Worker stats
-- Incident distribution
-- Activity metrics
-
----
+The frontend stays isolated and consumes the backend API only.
 
 ## Testing
 
-- Integration tests using `WebApplicationFactory`
-- Isolated database per test run
-- Real HTTP-level validation, not just unit tests
+The backend is validated with integration tests built on `WebApplicationFactory` and xUnit.
 
-Run tests:
+Current coverage includes:
 
-```bash
-dotnet test backend/tests/ObraFlow.Api.IntegrationTests
-```
+- workers endpoints
+- daily reports endpoints
+- incidents endpoints
+- dashboard endpoint
+- demo write rate limiting
+- demo database reset behavior
 
----
+These tests exercise the real API surface without mocking the HTTP layer.
 
-## Running The Project
+## How To Run Locally
 
-### With Docker
+### Backend with Docker
 
 ```bash
 docker compose -f backend/docker-compose.yml up --build
 ```
 
-Backend URLs with Docker:
+URLs:
 
 - API: `http://localhost:5000`
 - Swagger: `http://localhost:5000/swagger`
 
-### Backend Without Docker
+### Backend without Docker
 
 ```bash
-dotnet run --project backend/src/ObraFlow.Api
+dotnet run --project backend/src/ObraFlow.Api/ObraFlow.Api.csproj
 ```
 
-Backend URLs in local development:
+URLs:
 
 - API: `http://localhost:5250`
 - Swagger: `http://localhost:5250/swagger`
@@ -194,62 +115,34 @@ pnpm install
 pnpm dev
 ```
 
-Default frontend dev URL:
+Default URL:
 
 - App: `http://localhost:5173`
 
----
+The frontend uses `VITE_API_BASE_URL` when provided and falls back to `http://localhost:5250`.
 
-## Documentation
+## Public Demo Behavior
 
-- Backend overview: `backend/README.md`
-- Docs index: `backend/docs/index.md`
-- Contributing: `backend/docs/contributing.md`
+The backend includes lightweight demo protection to keep shared environments usable.
 
----
+- write rate limiting can be enabled for public demo mode
+- protected `POST` endpoints are limited per client IP
+- the demo database can be reset to a deterministic seeded state
 
-## Why This Project Matters
+Supported protected endpoints:
 
-This is not a tutorial project.
+- `POST /workers`
+- `POST /daily-reports`
+- `POST /incidents`
 
-It is designed to demonstrate:
+The demo reset entry point is available through:
 
-- Real backend architecture decisions
-- Clean separation of concerns
-- Production-like setup with database, Docker, and tests
-- Ability to scale into a full product with a SaaS-ready architecture
+```bash
+dotnet run --project backend/src/ObraFlow.Api/ObraFlow.Api.csproj -- reset-demo
+```
 
----
+## Docs
 
-## Status
-
-Backend MVP complete:
-
-- Workers: complete
-- DailyReports: complete
-- Incidents: complete
-- Dashboard: complete
-- validated with `dotnet build`, `dotnet test`, local runtime, and Docker Compose
-
-Frontend MVP available:
-
-- Dashboard connected to API
-- Workers connected to API
-- Create Worker route and form connected to API
-- DailyReports connected to API
-- Incidents connected to API
-- validated with successful frontend/backend communication against the API
-
-Still pending:
-
-- Materials end-to-end module through Application and API
-- richer workflows beyond read-focused portfolio views
-- additional create and update forms beyond workers
-- additional frontend polish for product workflows
-
----
-
-## Author
-
-Adrián Alcaraz  
-Junior Software Developer focused on building real-world systems with solid architecture and scalability in mind.
+- backend overview: `backend/README.md`
+- backend docs index: `backend/docs/index.md`
+- frontend architecture: `frontend/docs/frontend-architecture.md`

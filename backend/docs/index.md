@@ -31,6 +31,7 @@ If you are new to the backend, read in this order:
 
 - `setup-and-operations.md`: local setup, Docker, and runtime notes
 - `database.md`: PostgreSQL, EF Core model, and migration workflow
+- `demo-protection.md`: demo write protection and reset behavior
 - `testing-and-quality.md`: verification expectations, testing direction, and quality rules
 
 ### Team Collaboration

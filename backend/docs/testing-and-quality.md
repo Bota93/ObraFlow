@@ -1,104 +1,46 @@
 # Testing And Quality
 
-## Purpose
+## Current Testing Approach
 
-This document defines the quality expectations for ObraFlow as it evolves from a foundation project into a larger backend maintained by multiple contributors.
+ObraFlow currently uses integration tests for backend verification.
 
-## Current State
+The suite is built with:
 
-Right now, the repository has:
+- xUnit
+- FluentAssertions
+- `WebApplicationFactory`
+- in-memory SQLite for isolated test runs
 
-- a layered solution structure
-- PostgreSQL integration
-- EF Core mappings
-- migrations
-- Docker-based local runtime
-- API integration tests for `Workers`, `DailyReports`, and `Incidents`
+Tests are written as full integration tests against the real HTTP pipeline using `WebApplicationFactory`, without mocking the transport layer.
 
-What is still missing:
+## What The Integration Suite Covers
 
-- application-level tests
-- infrastructure-focused persistence tests
-- centralized error handling
-- health and quality gates in CI
+Current coverage includes:
 
-## Quality Priorities
+- workers endpoints
+- daily reports endpoints
+- incidents endpoints
+- dashboard summary endpoint
+- demo write rate limiting
+- demo database reset behavior
 
-The quality order should follow the project delivery order from `AGENTS.md`:
+The tests exercise the real API surface. They do not mock the HTTP layer.
 
-1. Keep the solution buildable.
-2. Keep PostgreSQL connectivity working.
-3. Keep Docker Compose working.
-4. Keep migrations correct.
-5. Add feature behavior safely.
+## Verification Priorities
 
-## Minimum Verification For Changes
+Before merging backend changes, the most important checks are:
 
-Before merging a branch, contributors should verify the parts affected by their work.
+1. the solution builds
+2. integration tests pass
+3. Docker Compose still works when runtime or persistence changes
+4. migrations remain consistent when the schema changes
+5. documentation matches the implemented behavior
 
-Typical checks:
+## Near-Term Quality Gaps
 
-- solution builds
-- migrations apply cleanly when schema changes
-- Docker Compose still starts when runtime or infrastructure changes
-- updated endpoints return the expected status codes
-- integration tests pass for affected HTTP modules
-- documentation matches the implemented behavior
+Still missing:
 
-## Expected Test Layers As The Project Grows
-
-### Domain Tests
-
-Add these when domain behavior becomes richer than simple data holders.
-
-Examples:
-
-- enum-driven rules
-- domain exceptions
-- invariant protection
-
-### Application Tests
-
-These should validate:
-
-- use-case orchestration
-- DTO mapping behavior
-- business flow outcomes
-
-### Infrastructure Tests
-
-These should validate:
-
-- EF Core mappings
-- query behavior
-- migration safety
-- provider-specific persistence expectations
-
-### API Tests
-
-These should validate:
-
-- routing
-- response codes
-- request validation behavior
-- error response shape
-
-## Recommended Near-Term Quality Improvements
-
-The best next additions are:
-
-- an application test project aligned with the current layers
-- infrastructure tests that exercise PostgreSQL behavior and migrations
-- consistent validation and exception handling
-- a shared API error contract
-
-## Documentation Rule
-
-If a contributor introduces:
-
-- a new verification command
-- a new test project
-- a new validation approach
-- a new quality gate
-
-they should update this document in the same branch.
+- application-layer tests
+- infrastructure-focused persistence tests against PostgreSQL behavior
+- centralized exception handling
+- broader CI quality gates

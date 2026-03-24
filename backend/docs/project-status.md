@@ -2,100 +2,68 @@
 
 ## Summary
 
-ObraFlow is currently a functional MVP backend.
+ObraFlow backend is currently a functional MVP with real persistence, HTTP endpoints, integration tests, and demo-oriented operational protection.
 
-The solution already demonstrates:
+## Implemented Today
 
-- layered project structure
-- PostgreSQL integration
-- EF Core model configuration
-- migrations
-- Dockerized local execution
-- working HTTP endpoints for three MVP modules
-- a working dashboard summary endpoint
-- coherent seed data for realistic API responses
-- API integration tests
-- verified local build, test, runtime, and Docker workflow
+### Domain
 
-## What Exists Today
+- `Worker`
+- `DailyReport`
+- `Incident`
+- `Material`
+- `IncidentStatus`
 
-### Domain Model
+### Application
 
-Implemented entities:
-
-- Worker
-- DailyReport
-- Incident
-- Material
-
-Implemented enum:
-
-- IncidentStatus
+- DTOs for workers, daily reports, incidents, and dashboard
+- service contracts for workers, daily reports, incidents, and dashboard
 
 ### Infrastructure
 
-Implemented:
-
 - `AppDbContext`
-- entity configurations
-- migration snapshot
-- migrations
+- EF Core configurations
 - PostgreSQL provider setup
-- seed data for `Workers`, `DailyReports`, and `Incidents`
-- persistence services for `Workers`, `DailyReports`, `Incidents`, and `Dashboard`
+- migrations
+- seed data for workers, daily reports, and incidents
+- service implementations for workers, daily reports, incidents, and dashboard
+- demo database reset service
 
 ### API
 
-Implemented:
-
-- dependency injection bootstrap
-- database registration
+- controllers for workers, daily reports, incidents, and dashboard
 - Swagger/OpenAPI
-- `DashboardController`
-- `WorkersController`
-- `DailyReportsController`
-- `IncidentsController`
-- configuration files
-- Dockerfile
+- runtime configuration
+- CORS configuration for frontend development
+- demo write rate limiting for protected create endpoints
+- `reset-demo` execution path
 
-### Application Layer
+### Testing
 
-Implemented:
+Integration coverage exists for:
 
-- DTOs for `Workers`, `DailyReports`, `Incidents`, and `Dashboard`
-- abstractions for `Workers`, `DailyReports`, `Incidents`, and `Dashboard`
-
-Still pending:
-
-- Materials application slice
-- richer application orchestration if business rules grow
+- workers
+- daily reports
+- incidents
+- dashboard
+- demo write rate limiting
+- demo reset
 
 ## Known Gaps
 
-The following features are not yet in the repository:
+Still not implemented:
 
-- Materials CRUD endpoints
-- middleware-based error handling
-- broader cross-layer tests beyond the current integration suite
+- materials application and API slice
+- centralized exception middleware
+- broader application and infrastructure test layers
 - authentication and authorization
 
-## Recommended Next Delivery Order
+## Delivery Direction
 
-The next steps that best fit the current architecture are:
+The next steps that fit the current architecture best are:
 
-1. Complete the `Materials` module across Application, Infrastructure, and Api.
-2. Add centralized validation and exception handling middleware.
-3. Expand test coverage beyond API integration tests.
-4. Improve operational features such as logging and health checks.
-5. Add security concerns only after the MVP modules are stable.
-
-## Portfolio Positioning
-
-In its current form, ObraFlow is best presented as:
-
-- a layered backend MVP with implemented CRUD slices
-- a persistence-focused .NET project with tested HTTP coverage
-- an architecture-first API with one remaining MVP module pending
-- a portfolio project validated in build, automated tests, local runtime, Docker, and frontend-to-backend communication
-
-That is a valid and professional stage, as long as the documentation clearly distinguishes what is already built from what is planned.
+1. implement materials end-to-end
+2. add centralized error handling
+3. expand test coverage beyond the integration suite
+4. improve operational readiness with health and logging concerns
+5. add security concerns after the MVP modules remain stable

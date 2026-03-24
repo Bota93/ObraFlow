@@ -1,338 +1,55 @@
-# Frontend Architecture - ObraFlow
+# Frontend Architecture
 
-## Purpose
+## Overview
 
-This document defines the architecture, conventions, and implementation strategy for the ObraFlow frontend.
+The ObraFlow frontend is a React MVP that consumes the backend API without duplicating backend business logic.
 
-Its goals are to:
-- ensure consistency during development
-- prevent overengineering
-- guide AI-assisted development
-- provide a clear execution path
+The frontend treats the backend as the single source of truth, with TanStack Query managing server state synchronization and caching.
 
-This is a working document, not theoretical documentation.
+It currently supports:
 
-## Current Status
+- dashboard view
+- workers list and create flow
+- daily reports list
+- incidents list
 
-The frontend workspace already has an implemented MVP structure.
+## Structure
 
-It already includes:
-- Vite + React + TypeScript
-- feature-oriented folder structure
-- React Router with app and public layouts
-- TanStack Query provider setup
-- centralized Axios client
-- dashboard, workers, daily reports, and incidents views connected to the backend API
-- create worker flow implemented with React Hook Form and Zod
+The frontend uses a feature-based structure inside `frontend/src`:
 
-The feature architecture described in this document remains the reference shape for the next iterations as the codebase evolves.
+- `app/` for router, layouts, and providers
+- `pages/` for route-level composition
+- `features/` for domain-specific UI, hooks, API calls, and types
+- `shared/` for cross-cutting client, config, constants, and reusable components
 
-## Planned Tech Stack
+## Data Flow Pattern
 
-- React
-- Vite
-- TypeScript
-- Tailwind CSS
-- React Router
-- TanStack Query
-- React Hook Form
-- Zod
+The typical frontend flow is:
 
-## Architectural Principles
+1. a page composes one or more feature components
+2. the feature component uses a feature hook
+3. the hook calls a feature API function
+4. the API function uses the shared HTTP client
 
-- No overengineering
-- Prefer simplicity over abstraction
-- Clear separation of concerns
-- Feature-oriented structure
-- Avoid premature global state
-- Keep components focused and predictable
-- Backend is the source of truth
+That keeps route composition, server-state access, and HTTP details separated.
 
-## Project Structure
+## Server State
 
-```text
-src/
-  app/
-    layouts/
-    providers/
-    router/
+TanStack Query is used for server state:
 
-  pages/
-    dashboard/
-    workers/
-    daily-reports/
-    incidents/
-    not-found/
-
-  features/
-    dashboard/
-      api/
-      components/
-      hooks/
-      types/
-    workers/
-      api/
-      components/
-      hooks/
-      schemas/
-      types/
-    daily-reports/
-      api/
-      components/
-      hooks/
-      schemas/
-      types/
-    incidents/
-      api/
-      components/
-      hooks/
-      schemas/
-      types/
-
-  shared/
-    api/
-    components/
-    config/
-    constants/
-    hooks/
-    lib/
-    types/
-
-  assets/
-  styles/
-
-  main.tsx
-```
-
-## Layer Responsibilities
-
-### `app/`
-
-Global application setup:
-- routing
-- providers
-- layouts
-
-### `pages/`
-
-Route-level components:
-- compose features
-- avoid heavy business logic
-- define page structure
-
-### `features/`
-
-Domain-oriented frontend modules.
-
-Each feature contains only the code needed for its use cases, such as:
-- API calls
-- hooks for data and behavior
-- UI components
-- types and schemas
-
-Features should stay isolated and cohesive.
-
-### `shared/`
-
-Reusable and cross-cutting code:
-- API client
-- reusable UI components
-- utilities
-- configuration
-- constants
-- shared types when truly cross-feature
-
-## Routing Strategy
-
-Use React Router with two main layouts:
-- `PublicLayout` for future authentication-related flows
-- `AppLayout` for the main application UI
-
-All core product modules should live under `AppLayout`.
-
-## State Management Strategy
-
-### Server State
-
-Handled with TanStack Query for:
-- fetching
+- data fetching
 - caching
-- invalidation
+- invalidation for write flows where needed
 
-### UI State
+The shared Axios client lives in `shared/api`, and each feature keeps its own API calls close to the related UI code.
 
-Handled locally with:
-- `useState`
-- `useReducer` only when the state shape justifies it
+## Current Direction
 
-### Global State
+The frontend should stay:
 
-Use React Context only when necessary, for example:
-- authentication in the future
-- app-level settings
+- simple
+- feature-oriented
+- API-driven
+- easy to evolve during the MVP phase
 
-Do not introduce global state prematurely.
-
-## API Strategy
-
-- No direct API calls inside components
-- Centralized HTTP client in `shared/api`
-- Feature-specific API functions inside each feature
-
-Examples:
-- `features/workers/api/get-workers.ts`
-- `features/workers/api/create-worker.ts`
-
-## Data Contracts
-
-The frontend should define its own types.
-
-Do not blindly mirror backend entities. Model only what the UI needs.
-
-Examples:
-- `WorkerListItem`
-- `WorkerDetail`
-- `CreateWorkerRequest`
-
-## Forms and Validation
-
-Use:
-- React Hook Form
-- Zod
-
-Forms should include:
-- validation
-- error feedback
-- loading state
-
-## UI Direction
-
-The interface should follow a practical admin-panel approach:
-- sidebar navigation
-- topbar
-- tables for data-heavy views
-- metric cards for summaries
-- simple and clear forms
-
-Avoid:
-- unnecessary animations
-- visual complexity without product value
-
-## Naming Conventions
-
-- components: `kebab-case.tsx`
-- hooks: `use-*.ts`
-- pages: `*-page.tsx`
-- schemas: `*.schema.ts`
-- types: `*.types.ts`
-- API files: one function per use case when practical
-
-## Development Rules
-
-- No business logic in presentation-only components
-- Avoid unnecessary abstractions
-- Keep features self-contained
-- Do not introduce tools without justification
-- Prioritize readability and maintainability
-
-## Backend Integration
-
-Planned environment variable:
-
-```env
-VITE_API_BASE_URL=http://localhost:5250
-```
-
-This should match the backend local development URL from `launchSettings.json`. When running through Docker Compose, the exposed API URL is `http://localhost:5000`.
-
-All requests should go through a centralized API client.
-
-## Core Modules
-
-- Dashboard
-- Workers
-- Daily Reports
-- Incidents
-
-## Implementation Roadmap
-
-### Phase 1 - Foundation
-
-- Vite setup
-- TypeScript
-- Tailwind CSS
-- Router
-- Layout
-- API client
-
-Status: completed
-
-### Phase 2 - Dashboard
-
-- integrate dashboard summary endpoint
-- build metrics view
-
-Status: implemented as a read-focused MVP view
-
-### Phase 3 - Workers
-
-- list
-- detail
-- create
-
-Status: list-style API view and create flow implemented, detail still pending
-
-### Phase 4 - Daily Reports
-
-- list
-- detail
-- create
-
-Status: list-style API view implemented, detail and create still pending
-
-### Phase 5 - Incidents
-
-- list
-- detail
-- create or update
-
-Status: list-style API view implemented, detail/create/update still pending
-
-### Phase 6 - Polish
-
-- error handling
-- empty states
-- UI consistency
-- basic responsiveness
-
-## Working With Codex
-
-Codex is an assistant, not an architect.
-
-Use Codex for:
-- implementation support
-- repetitive code
-- small refactors
-
-Do not use Codex for:
-- architectural decisions
-- introducing new dependencies without justification
-- adding complexity without clear need
-
-Every AI-generated change should satisfy these checks:
-- Is it necessary?
-- Is it simple?
-- Does it follow this architecture?
-- Can it be explained clearly?
-
-If not, reject it.
-
-## Final Note
-
-This document defines how the frontend should evolve.
-
-If implementation diverges from this document, either:
-- update this document
-- or refactor the code
-
-Do not allow silent inconsistency between the documented architecture and the real implementation.
+It should not introduce unnecessary state libraries or frontend-side business logic.

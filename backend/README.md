@@ -1,166 +1,97 @@
 # ObraFlow Backend
 
-This folder contains the ObraFlow backend inside the repository monorepo. It remains a portfolio-ready construction site management backend built with ASP.NET Core, Entity Framework Core, PostgreSQL, Docker Compose, and a strict layered architecture.
+Backend workspace for ObraFlow, a construction operations MVP built with ASP.NET Core, EF Core, PostgreSQL, and a layered architecture.
 
-The backend already includes working MVP slices for `Workers`, `DailyReports`, and `Incidents`, plus persistence support for `Materials`. The project is structured to stay buildable, easy to extend, and aligned with the architectural rules in `AGENTS.md`.
+## Current Scope
 
-## Features
+Implemented end-to-end:
 
-- Workers management (CRUD)
-- Daily reports tracking
-- Incident management
-- Dashboard summary with aggregated metrics
-- Integration tests with isolated test database
-- Dockerized environment with PostgreSQL
+- workers CRUD
+- daily reports CRUD
+- incidents CRUD
+- dashboard summary endpoint
 
-## Current Stack
+Also implemented:
 
-- .NET 10
-- ASP.NET Core Web API
-- Entity Framework Core 10
-- PostgreSQL 16
-- Docker Compose
-- Swagger / OpenAPI
-- xUnit + FluentAssertions integration tests
+- PostgreSQL persistence with EF Core migrations
+- seeded demo data for workers, daily reports, and incidents
+- integration tests with isolated HTTP-level verification
+- demo write protection and demo reset support
 
-## Solution Structure
+Planned next steps:
 
-```text
-src/
-├── ObraFlow.Api
-├── ObraFlow.Application
-├── ObraFlow.Domain
-└── ObraFlow.Infrastructure
+- materials through Application and API
+- centralized exception handling
+- broader test layers beyond the current integration suite
 
-tests/
-└── ObraFlow.Api.IntegrationTests
-```
+## Architecture
 
-## Layer Responsibilities
+The backend is split into four projects:
 
-- `ObraFlow.Domain`: entities and enums only
-- `ObraFlow.Application`: DTOs and service contracts
-- `ObraFlow.Infrastructure`: EF Core, PostgreSQL, entity configurations, migrations, service implementations, seed data
-- `ObraFlow.Api`: controllers, HTTP pipeline, Swagger, DI, runtime configuration
+- `ObraFlow.Domain`
+- `ObraFlow.Application`
+- `ObraFlow.Infrastructure`
+- `ObraFlow.Api`
 
-## MVP Coverage
+Responsibilities stay separated:
 
-Implemented vertical slices:
+- `Domain` contains entities and enums
+- `Application` contains DTOs and service contracts
+- `Infrastructure` contains EF Core, migrations, seed data, and service implementations
+- `Api` contains controllers, runtime configuration, Swagger, and HTTP concerns
 
-- Workers
-- DailyReports
-- Incidents
+## Runtime
 
-Implemented at persistence level only:
-
-- Materials
-
-## Current Status
-
-Already implemented:
-
-- layered solution and project references
-- PostgreSQL `AppDbContext`
-- entity configurations for all MVP entities
-- migrations under `Infrastructure/Persistence/Migrations`
-- coherent seed data for workers, daily reports, and incidents
-- closed MVP modules for `Workers`, `DailyReports`, and `Incidents`
-- CRUD endpoints for `Workers`, `DailyReports`, and `Incidents`
-- `GET /dashboard/summary`
-- application DTOs and service contracts for `Workers`, `DailyReports`, `Incidents`, and `Dashboard`
-- infrastructure service implementations for `Workers`, `DailyReports`, `Incidents`, and `Dashboard`
-- Swagger/OpenAPI
-- Docker Compose for API + PostgreSQL
-- API integration tests for `Workers`, `DailyReports`, `Incidents`, and `Dashboard`
-- verified local workflow with `dotnet build`, `dotnet test`, `dotnet run`, and Docker Compose
-
-Still pending:
-
-- Materials application module and HTTP endpoints
-- centralized exception middleware
-- a shared API error contract beyond default validation responses
-- broader test coverage at infrastructure and application levels
-- authentication and authorization
-
-## Quick Start
-
-All commands below assume your current directory is `backend/`. If you are in the repository root, either run `cd backend` first or prefix paths with `backend/`.
-
-### Run With Docker Compose
+From `backend/`, run with Docker:
 
 ```bash
 docker compose up --build
 ```
 
-Services:
+URLs:
 
 - API: `http://localhost:5000`
-- Swagger UI: `http://localhost:5000/swagger`
-- PostgreSQL: `localhost:5432`
+- Swagger: `http://localhost:5000/swagger`
 
-Default Docker database credentials:
-
-- Database: `obraflowdb`
-- Username: `postgres`
-- Password: `postgres`
-
-### Run Locally
-
-1. Start PostgreSQL.
-2. Check the connection string in `src/ObraFlow.Api/appsettings.json`.
-3. Apply migrations if needed.
-4. Run the API:
+Run locally against PostgreSQL:
 
 ```bash
 dotnet run --project src/ObraFlow.Api/ObraFlow.Api.csproj
 ```
 
-By default, local development uses:
+URLs:
 
 - API: `http://localhost:5250`
 - HTTPS API: `https://localhost:7129`
-- Swagger UI: `http://localhost:5250/swagger`
+- Swagger: `http://localhost:5250/swagger`
 
-## Common Commands
+## Testing
 
-Build the solution:
+The backend uses xUnit integration tests with `WebApplicationFactory`.
 
-```bash
-dotnet build ObraFlow.slnx
-```
+Current coverage includes:
 
-Run API integration tests:
+- workers endpoints
+- daily reports endpoints
+- incidents endpoints
+- dashboard summary endpoint
+- demo write rate limiting
+- demo reset behavior
 
-```bash
-dotnet test tests/ObraFlow.Api.IntegrationTests/ObraFlow.Api.IntegrationTests.csproj
-```
+These tests exercise the real API pipeline without mocking the HTTP layer.
 
-Apply migrations:
+## Demo Protection
 
-```bash
-dotnet ef database update --project src/ObraFlow.Infrastructure --startup-project src/ObraFlow.Api
-```
+For shared demo environments, the backend supports:
 
-Add a migration:
+- optional write rate limiting on protected `POST` endpoints
+- deterministic demo database reset through `reset-demo`
 
-```bash
-dotnet ef migrations add <MigrationName> --project src/ObraFlow.Infrastructure --startup-project src/ObraFlow.Api
-```
+See:
 
-## API Surface
-
-Current routes:
-
-- `/dashboard/summary`
-- `/workers`
-- `/daily-reports`
-- `/incidents`
-
-`/dashboard/summary` exposes `GET`.
-
-`/workers`, `/daily-reports`, and `/incidents` expose `GET`, `GET by id`, `POST`, `PUT`, and `DELETE`.
-
-For concrete examples, see `docs/api-reference.md`.
+- `docs/demo-protection.md`
+- `docs/testing-and-quality.md`
+- `docs/api-reference.md`
 
 ## Documentation
 
@@ -168,10 +99,5 @@ Start here:
 
 - `docs/index.md`
 - `docs/architecture.md`
-- `docs/project-status.md`
 - `docs/setup-and-operations.md`
 - `docs/api-reference.md`
-
-## Portfolio Notes
-
-ObraFlow already demonstrates clean boundaries, EF Core persistence, containerized runtime, tested HTTP endpoints, and a controlled path for adding the remaining module work without collapsing the architecture.

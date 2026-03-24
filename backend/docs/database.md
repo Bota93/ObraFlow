@@ -1,14 +1,14 @@
 # Database
 
-All commands below assume the current directory is `backend/`. If you are at the repository root, run `cd backend` first or prefix the paths with `backend/`.
+All commands below assume the current directory is `backend/`.
 
 ## Provider
 
-ObraFlow uses PostgreSQL through the `Npgsql.EntityFrameworkCore.PostgreSQL` provider.
+ObraFlow uses PostgreSQL through `Npgsql.EntityFrameworkCore.PostgreSQL`.
 
 ## DbContext
 
-The main EF Core context is `AppDbContext` in `src/ObraFlow.Infrastructure/Persistence/AppDbContext.cs`.
+The main EF Core context is `src/ObraFlow.Infrastructure/Persistence/AppDbContext.cs`.
 
 Registered sets:
 
@@ -17,79 +17,27 @@ Registered sets:
 - `Incidents`
 - `Materials`
 
-The context applies entity configurations automatically from the Infrastructure assembly.
+Entity configurations are applied automatically from the Infrastructure assembly.
 
-## Entity Mapping Summary
+## Seeded Demo Data
 
-### Worker
+The backend includes deterministic seed data for:
 
-Table: `workers`
+- workers
+- daily reports
+- incidents
 
-Columns:
-
-- `Id` as primary key
-- `Name` required, max length 140
-- `Role` required, max length 80
-- `PhoneNumber` required, max length 30
-- `HourlyRate` required, precision `(10,2)`
-- `CreatedAtUtc` required
-- `IsActive` required
-
-Relationship:
-
-- one worker has many daily reports
-
-Seed data:
-
-- three workers are inserted through `WorkerSeed`
-
-### DailyReport
-
-Table: `dailyReports`
-
-Columns:
-
-- `Id` as primary key
-- `Date` required
-- `WorkerId` required foreign key
-- `HoursWorked` required, precision `(5,2)`
-- `Description` required, max length 500
-
-Delete behavior:
-
-- cascade delete from `workers`
-
-### Incident
-
-Table: `incidents`
-
-Columns:
-
-- `Id` as primary key
-- `Title` required, max length 150
-- `Description` required, max length 1000
-- `Status` required
-- `ReportedAtUtc` required
-
-### Material
-
-Table: `materials`
-
-Columns:
-
-- `Id` as primary key
-- `Name` required, max length 120
-- `Quantity` required, precision `(10,2)`
-- `Unit` required, max length 30
+That seeded state is used by the dashboard, integration tests, and demo reset flow.
 
 ## Migrations
 
-The initial migration is already present:
+Current migration set:
 
 - `20260319093208_InitialCreate`
 - `20260319120000_WorkersModule`
+- `20260321170000_DashboardSeedData`
 
-The current migration set creates the MVP tables, the `dailyReports` to `workers` foreign key, and the worker seed entries reflected in the model snapshot.
+The current model snapshot reflects the existing MVP tables and seeded demo data used by the backend.
 
 ## Common EF Core Commands
 
@@ -111,10 +59,18 @@ Remove the last migration:
 dotnet ef migrations remove --project src/ObraFlow.Infrastructure --startup-project src/ObraFlow.Api
 ```
 
-## Implementation Guidance
+## Demo Reset
 
-When the project grows:
+For demo environments, the backend can recreate the seeded state through:
 
-- keep all EF Core configurations under `Infrastructure/Persistence/Configurations`
+```bash
+dotnet run --project src/ObraFlow.Api/ObraFlow.Api.csproj -- reset-demo
+```
+
+This resets the database and restores the deterministic workers, daily reports, and incidents records.
+
+## Guidance
+
+- keep EF Core configurations under `Infrastructure/Persistence/Configurations`
 - keep migrations under `Infrastructure/Persistence/Migrations`
-- avoid placing persistence annotations or EF Core setup inside Domain
+- do not move persistence concerns into `Domain`

@@ -1,23 +1,23 @@
 # API Reference
 
-## Overview
+## Base URLs
 
-Current implemented HTTP resources:
+Local development:
+
+- `http://localhost:5250`
+- `http://localhost:5250/swagger`
+
+Docker Compose:
+
+- `http://localhost:5000`
+- `http://localhost:5000/swagger`
+
+## Implemented Resources
 
 - `Dashboard`
 - `Workers`
 - `DailyReports`
 - `Incidents`
-
-Base URL examples in local development:
-
-- `http://localhost:5250`
-- `http://localhost:5250/swagger`
-
-When running through Docker Compose, the API is exposed on:
-
-- `http://localhost:5000`
-- `http://localhost:5000/swagger`
 
 ## Dashboard
 
@@ -46,7 +46,7 @@ Routes:
 - `PUT /workers/{id}`
 - `DELETE /workers/{id}`
 
-Create and update payload shape:
+Create and update payload:
 
 ```json
 {
@@ -58,17 +58,7 @@ Create and update payload shape:
 }
 ```
 
-Response fields:
-
-- `id`
-- `name`
-- `role`
-- `phoneNumber`
-- `hourlyRate`
-- `createdAtUtc`
-- `isActive`
-
-## DailyReports
+## Daily Reports
 
 Routes:
 
@@ -78,7 +68,7 @@ Routes:
 - `PUT /daily-reports/{id}`
 - `DELETE /daily-reports/{id}`
 
-Create and update payload shape:
+Create and update payload:
 
 ```json
 {
@@ -88,15 +78,6 @@ Create and update payload shape:
   "description": "Daily report for trench inspection"
 }
 ```
-
-Response fields:
-
-- `id`
-- `date`
-- `workerId`
-- `workerName`
-- `hoursWorked`
-- `description`
 
 Behavior note:
 
@@ -112,7 +93,7 @@ Routes:
 - `PUT /incidents/{id}`
 - `DELETE /incidents/{id}`
 
-Create and update payload shape:
+Create and update payload:
 
 ```json
 {
@@ -129,14 +110,6 @@ Create and update payload shape:
 - `2` = `InProgress`
 - `3` = `Resolved`
 
-Response fields:
-
-- `id`
-- `title`
-- `description`
-- `status`
-- `reportedAtUtc`
-
 ## Common Status Codes
 
 - `200 OK` for successful reads and updates
@@ -144,7 +117,24 @@ Response fields:
 - `204 No Content` for successful deletes
 - `400 Bad Request` for validation failures
 - `404 Not Found` when the resource does not exist
+- `429 Too Many Requests` when demo write protection is enabled and the create limit is exceeded
+
+## Demo Protection Notes
+
+When `DemoMode:EnableWriteRateLimiting` is enabled, write rate limiting applies to:
+
+- `POST /workers`
+- `POST /daily-reports`
+- `POST /incidents`
+
+For details, see `demo-protection.md`.
+
+## Notes
+
+- All endpoints are designed for a stateless API environment
+- No authentication is currently implemented (MVP scope)
+- Demo environments may enforce write rate limiting
 
 ## Not Yet Implemented
 
-The `Materials` resource is not exposed yet through the API.
+`Materials` is still not exposed through the API.

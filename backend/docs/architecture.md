@@ -2,107 +2,78 @@
 
 ## Overview
 
-ObraFlow follows a four-layer architecture designed to keep business concepts, application flow, infrastructure, and HTTP concerns separated.
+ObraFlow backend follows a four-layer architecture so business concepts, application contracts, persistence, and HTTP concerns stay separated.
 
-```text
-Clients
-  -> ObraFlow.Api
-  -> ObraFlow.Application
-  -> ObraFlow.Domain
-  <- ObraFlow.Infrastructure
-```
+## Layers
 
-The API composes the application and infrastructure pieces. Domain stays at the center and does not depend on EF Core or HTTP-specific code.
+### Domain
 
-## Projects
+Contains:
 
-### ObraFlow.Domain
+- entities
+- enums
+- domain-focused types
 
-Purpose:
+It should not contain EF Core configuration or HTTP concerns.
 
-- store business entities
-- store enums
-- remain independent from persistence and transport concerns
+### Application
 
-Current contents:
+Contains:
 
-- `Worker`
-- `DailyReport`
-- `Incident`
-- `Material`
-- `IncidentStatus`
+- DTOs
+- service contracts
+- use-case level contracts between the API and the implementation
 
-### ObraFlow.Application
+It should not contain controllers or persistence implementation details.
 
-Purpose:
+### Infrastructure
 
-- host DTOs
-- define service contracts
-- orchestrate use cases
-- stay independent from ASP.NET Core and EF Core implementation details
-
-Current status:
-
-- DTOs exist for `Workers`, `DailyReports`, and `Incidents`
-- service contracts exist for those modules
-- the layer stays free of HTTP and EF Core concerns
-
-### ObraFlow.Infrastructure
-
-Purpose:
-
-- implement persistence with EF Core
-- define `AppDbContext`
-- configure entity mappings
-- store migrations
-
-Current contents:
+Contains:
 
 - `AppDbContext`
-- entity configurations for all MVP entities
-- PostgreSQL-targeted migrations
-- worker seed data
-- service implementations for `Workers`, `DailyReports`, and `Incidents`
+- EF Core configurations
+- migrations
+- seed data
+- service implementations
 
-### ObraFlow.Api
+It is the persistence and runtime implementation layer for the application contracts.
 
-Purpose:
+### Api
 
-- configure services and middleware
-- expose controllers and HTTP endpoints
-- host Swagger/OpenAPI
-- load runtime configuration
+Contains:
 
-Current contents:
+- controllers
+- dependency injection bootstrap
+- middleware and HTTP pipeline configuration
+- Swagger and runtime configuration
 
-- `Program.cs` with dependency injection and EF Core registration
-- Swagger setup
-- controllers for `Workers`, `DailyReports`, and `Incidents`
-- runtime configuration files
-- Dockerfile
+It should stay thin and delegate behavior to application-facing services.
 
-Current limitation:
+## Request Flow
 
-- `Materials` is not exposed yet through the Application and API layers
-- centralized exception middleware is not implemented yet
+The typical request path is:
 
-## Dependency Direction
+1. an HTTP request reaches an API controller
+2. the controller calls an application service contract
+3. the infrastructure implementation executes persistence logic through EF Core
+4. DTOs are returned to the API and serialized back to the client
 
-The intended dependency flow is:
+Dependency direction stays aligned with that flow:
 
 - `Api` depends on `Application` and `Infrastructure`
 - `Infrastructure` depends on `Application` and `Domain`
 - `Application` depends on `Domain`
 - `Domain` depends on no internal project
 
-This keeps the business model reusable and avoids pushing persistence or HTTP logic into the wrong layer.
+## Current Scope
 
-## Why This Matters
+Implemented end-to-end today:
 
-This structure supports the project goals from `AGENTS.md`:
+- workers
+- daily reports
+- incidents
+- dashboard summary
 
-- thin controllers
-- persistence isolated in Infrastructure
-- no HTTP concerns in Application
-- no EF Core configuration in Domain
-- minimal safe growth as the MVP modules are implemented
+Implemented at persistence level only:
+
+- materials
