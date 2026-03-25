@@ -114,7 +114,29 @@ Default URL:
 
 - App: `http://localhost:5173`
 
-The frontend uses `VITE_API_BASE_URL` when provided and falls back to `http://localhost:5250`.
+In development, the frontend falls back to `http://localhost:5250`.
+Production builds require `VITE_API_BASE_URL`.
+
+For local configuration examples, see:
+
+- `backend/.env.example`
+- `frontend/.env.example`
+
+## Deployment
+
+ObraFlow is prepared to deploy with:
+
+- Supabase for PostgreSQL
+- Render for the ASP.NET Core API
+- Vercel for the Vite frontend
+
+The repository includes:
+
+- `render.yaml` at the repository root for the Render API service
+- `frontend/vercel.json` for Vercel SPA routing and build settings
+- environment variable examples for backend and frontend
+
+Deployment and secret-handling guidance lives in `docs/deployment.md`.
 
 ## Public Demo Behavior
 

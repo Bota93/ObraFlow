@@ -4,9 +4,9 @@ services:
     container_name: obraflow-db
     restart: unless-stopped
     environment:
-      POSTGRES_DB: obraflowdb
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ${POSTGRES_DB:-obraflowdb}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
     ports:
       - "5432:5432"
     volumes:
@@ -23,7 +23,9 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:8080
-      ConnectionStrings__DefaultConnection: Host=db;Port=5432;Database=obraflowdb;Username=postgres;Password=postgres
+      Database__ApplyMigrationsOnStartup: ${Database__ApplyMigrationsOnStartup:-true}
+      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=${POSTGRES_DB:-obraflowdb};Username=${POSTGRES_USER:-postgres};Password=${POSTGRES_PASSWORD:-postgres}"
+      Cors__AllowedOrigins: ${Cors__AllowedOrigins:-http://localhost:5173,http://127.0.0.1:5173,http://[::1]:5173,http://localhost:4173,http://127.0.0.1:4173,http://[::1]:4173}
     ports:
       - "5000:8080"
 

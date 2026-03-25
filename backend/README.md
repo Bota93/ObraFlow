@@ -65,6 +65,10 @@ URLs:
 - HTTPS API: `https://localhost:7129`
 - Swagger: `http://localhost:5250/swagger`
 
+For environment-based local configuration, start from `backend/.env.example`.
+
+For Supabase + Render deployment guidance, see `../docs/deployment.md`.
+
 ## Testing
 
 The backend uses xUnit integration tests with `WebApplicationFactory`.

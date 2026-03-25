@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.Threading.RateLimiting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.RateLimiting;
 using ObraFlow.Api.Middleware;
 using ObraFlow.Application.Abstractions;
@@ -13,6 +14,11 @@ const string DemoCreateWritesPolicy = "DemoCreateWrites";
 var demoResetRequested = args.Any(arg =>
     string.Equals(arg, "reset-demo", StringComparison.OrdinalIgnoreCase) ||
     string.Equals(arg, "--reset-demo", StringComparison.OrdinalIgnoreCase));
+var forwardedHeadersEnabled = string.Equals(
+    Environment.GetEnvironmentVariable("ASPNETCORE_FORWARDEDHEADERS_ENABLED"),
+    "true",
+    StringComparison.OrdinalIgnoreCase);
+var allowedOrigins = GetAllowedOrigins(builder.Configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -21,16 +27,26 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(FrontendCorsPolicy, policy =>
     {
-        policy
-            .WithOrigins(
-                "http://localhost:5173",
-                "http://127.0.0.1:5173",
-                "http://localhost:4173",
-                "http://127.0.0.1:4173")
-            .AllowAnyHeader()
-            .AllowAnyMethod();
+        if (allowedOrigins.Length > 0)
+        {
+            policy
+                .WithOrigins(allowedOrigins)
+                .SetIsOriginAllowedToAllowWildcardSubdomains()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        }
     });
 });
+
+if (forwardedHeadersEnabled)
+{
+    builder.Services.Configure<ForwardedHeadersOptions>(options =>
+    {
+        options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+        options.KnownNetworks.Clear();
+        options.KnownProxies.Clear();
+    });
+}
 
 builder.Services.AddRateLimiter(options =>
 {
@@ -87,6 +103,12 @@ builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<DemoDatabaseResetService>();
 
 var app = builder.Build();
+var applyMigrationsOnStartup = app.Configuration.GetValue<bool>("Database:ApplyMigrationsOnStartup");
+
+if (applyMigrationsOnStartup && !demoResetRequested)
+{
+    await ApplyMigrationsAsync(app.Services);
+}
 
 if (demoResetRequested)
 {
@@ -107,6 +129,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+if (forwardedHeadersEnabled)
+{
+    app.UseForwardedHeaders();
+}
+
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
@@ -114,8 +141,60 @@ app.UseCors(FrontendCorsPolicy);
 app.UseRateLimiter();
 
 app.UseAuthorization();
+app.MapGet("/health", CheckHealthAsync);
 app.MapControllers();
 
 app.Run();
 
 public partial class Program;
+
+static string[] GetAllowedOrigins(IConfiguration configuration)
+{
+    var configuredOrigins = configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
+    if (configuredOrigins is { Length: > 0 })
+    {
+        return configuredOrigins
+            .Where(origin => !string.IsNullOrWhiteSpace(origin))
+            .Select(origin => origin.Trim())
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
+    }
+
+    var rawOrigins = configuration["Cors:AllowedOrigins"];
+    if (string.IsNullOrWhiteSpace(rawOrigins))
+    {
+        return Array.Empty<string>();
+    }
+
+    return rawOrigins
+        .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+        .Distinct(StringComparer.OrdinalIgnoreCase)
+        .ToArray();
+}
+
+static async Task ApplyMigrationsAsync(IServiceProvider services)
+{
+    await using var scope = services.CreateAsyncScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await dbContext.Database.MigrateAsync();
+}
+
+static async Task<IResult> CheckHealthAsync(AppDbContext dbContext, CancellationToken cancellationToken)
+{
+    try
+    {
+        var canConnect = await dbContext.Database.CanConnectAsync(cancellationToken);
+
+        return canConnect
+            ? Results.Ok(new { status = "ok" })
+            : Results.Problem(
+                statusCode: StatusCodes.Status503ServiceUnavailable,
+                title: "Database unavailable");
+    }
+    catch
+    {
+        return Results.Problem(
+            statusCode: StatusCodes.Status503ServiceUnavailable,
+            title: "Database unavailable");
+    }
+}
