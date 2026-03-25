@@ -146,8 +146,6 @@ app.MapControllers();
 
 app.Run();
 
-public partial class Program;
-
 static string[] GetAllowedOrigins(IConfiguration configuration)
 {
     var configuredOrigins = configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
@@ -198,3 +196,5 @@ static async Task<IResult> CheckHealthAsync(AppDbContext dbContext, Cancellation
             title: "Database unavailable");
     }
 }
+
+public partial class Program;
