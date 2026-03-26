@@ -30,6 +30,14 @@ Use a Supabase Postgres connection string only in the backend.
 Recommended for the Render runtime:
 
 - start with the Supabase **Session pooler** connection string
+- do not use the IPv6 direct host for this setup
+- require SSL in the connection string
+- keep the password only in Render, never in committed files
+
+Do not use:
+
+- the Supabase Project URL
+- frontend `VITE_*` variables for database credentials
 
 Why:
 
@@ -54,23 +62,28 @@ The repository root includes `render.yaml` for the API service.
 
 Important settings already prepared there:
 
-- Docker runtime from `backend/`
+- Root Directory: `backend`
+- Dockerfile path: `Dockerfile`
 - health check on `GET /health`
 - forwarded headers enabled for reverse-proxy HTTPS handling
-- startup migrations enabled
+- demo write rate limiting enabled
+- startup migrations disabled by default
 
 Set these environment variables in Render:
 
 - `ConnectionStrings__DefaultConnection`
   - secret
   - set this to the Supabase Session pooler connection string
+  - require SSL
 - `Cors__AllowedOrigins`
-  - not secret, but environment-specific
-  - comma-separated list such as `https://obraflow.vercel.app,https://app.example.com`
+  - prepared in `render.yaml` as `https://obraflow.adrianalcaraz.es,https://<project>.vercel.app`
+  - replace `<project>` with the exact Vercel project subdomain before the final public deployment if needed
 
-Avoid broad wildcards such as `https://*.vercel.app` unless you explicitly want to trust every matching preview subdomain pattern.
+Keep `Database__ApplyMigrationsOnStartup=false` as the steady-state default. Enable it only for the initial bootstrap if the database has not been migrated yet, then set it back to `false`.
 
-`Database__ApplyMigrationsOnStartup=true` is convenient for a single-instance deployment. If you later scale the API horizontally, prefer a controlled migration step before rollout.
+The public backend target is:
+
+- `https://api-obraflow.adrianalcaraz.es`
 
 ## Vercel
 
@@ -85,21 +98,30 @@ The frontend includes `frontend/vercel.json` for:
 
 Set only this frontend environment variable:
 
-- `VITE_API_BASE_URL=https://your-render-service.onrender.com`
+- `VITE_API_BASE_URL=https://api-obraflow.adrianalcaraz.es`
 
 Important:
 
 - Vite exposes `VITE_*` values to the browser
 - never place secrets, keys, database URLs, or privileged tokens in `VITE_*`
+- the frontend already fails fast during production build if `VITE_API_BASE_URL` is missing
+
+The public frontend target is:
+
+- `https://obraflow.adrianalcaraz.es`
 
 ## Recommended Rollout Order
 
 1. Create the Supabase project.
-2. Copy the Session pooler connection string into Render as `ConnectionStrings__DefaultConnection`.
-3. Deploy the API on Render from `render.yaml`.
-4. Set `Cors__AllowedOrigins` in Render to the final Vercel domain.
-5. Deploy the frontend on Vercel with `VITE_API_BASE_URL` pointing to Render.
-6. After Vercel gives you the production URL, confirm it is present in the Render CORS list.
+2. Open **Connect** in Supabase and copy the **Session pooler** connection details.
+3. Build the Render connection string from the pooler values with SSL required.
+4. Set that string in Render as `ConnectionStrings__DefaultConnection`.
+5. Set `Cors__AllowedOrigins=https://obraflow.adrianalcaraz.es,https://<project>.vercel.app` in Render if you need to replace the placeholder with the real Vercel subdomain.
+6. If this is the first bootstrap, temporarily set `Database__ApplyMigrationsOnStartup=true`.
+7. Deploy the API on Render from `render.yaml`.
+8. After the first successful migration, set `Database__ApplyMigrationsOnStartup=false` again.
+9. Deploy the frontend on Vercel with `VITE_API_BASE_URL=https://api-obraflow.adrianalcaraz.es`.
+10. Confirm the custom frontend domain and the exact `https://<project>.vercel.app` domain are both covered by the backend CORS list.
 
 ## Local Files
 

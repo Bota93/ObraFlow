@@ -51,6 +51,8 @@ Useful local URLs:
 - HTTPS API: `https://localhost:7129`
 - Swagger UI: `http://localhost:5250/swagger`
 
+If you run the frontend locally, the development client now tries `http://localhost:5250` first and falls back to `http://localhost:5000` when the API is only available through Docker Compose.
+
 ## Configuration
 
 ### Local Default Connection String

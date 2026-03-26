@@ -8,6 +8,10 @@ import {
   type CreateWorkerFormValues,
 } from '../schemas/create-worker.schema'
 
+type ApiMessagePayload = {
+  message?: string
+}
+
 export function CreateWorkerForm() {
   const navigate = useNavigate()
   const { mutateAsync, isPending, error } = useCreateWorker()
@@ -44,6 +48,15 @@ export function CreateWorkerForm() {
       if (isAxiosError(submitError) && submitError.response?.status === 400) {
         setError('root', {
           message: 'The worker could not be created. Please review the form fields.',
+        })
+        return
+      }
+
+      if (isAxiosError(submitError) && submitError.response?.status === 429) {
+        setError('root', {
+          message:
+            getApiMessage(submitError) ??
+            'Demo write limit exceeded. Please wait a few minutes before trying again.',
         })
         return
       }
@@ -169,4 +182,14 @@ export function CreateWorkerForm() {
       </form>
     </section>
   )
+}
+
+function getApiMessage(error: unknown) {
+  if (!isAxiosError<ApiMessagePayload>(error)) {
+    return null
+  }
+
+  return typeof error.response?.data?.message === 'string'
+    ? error.response.data.message
+    : null
 }

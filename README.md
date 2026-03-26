@@ -114,7 +114,7 @@ Default URL:
 
 - App: `http://localhost:5173`
 
-In development, the frontend falls back to `http://localhost:5250`.
+In development, the frontend tries `http://localhost:5250` first and falls back to `http://localhost:5000` when the backend is running through Docker Compose.
 Production builds require `VITE_API_BASE_URL`.
 
 For local configuration examples, see:
@@ -137,6 +137,11 @@ The repository includes:
 - environment variable examples for backend and frontend
 
 Deployment and secret-handling guidance lives in `docs/deployment.md`.
+
+Deployment target:
+
+- frontend public URL: `https://obraflow.adrianalcaraz.es`
+- backend public URL: `https://api-obraflow.adrianalcaraz.es`
 
 ## Public Demo Behavior
 

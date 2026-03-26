@@ -15,19 +15,19 @@ services:
   api:
     build:
       context: .
-      dockerfile: src/ObraFlow.Api/Dockerfile
+      dockerfile: Dockerfile
     container_name: obraflow-api
     restart: unless-stopped
     depends_on:
       - db
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      ASPNETCORE_URLS: http://+:8080
+      ASPNETCORE_URLS: http://+:10000
       Database__ApplyMigrationsOnStartup: ${Database__ApplyMigrationsOnStartup:-true}
       ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=${POSTGRES_DB:-obraflowdb};Username=${POSTGRES_USER:-postgres};Password=${POSTGRES_PASSWORD:-postgres}"
       Cors__AllowedOrigins: ${Cors__AllowedOrigins:-http://localhost:5173,http://127.0.0.1:5173,http://[::1]:5173,http://localhost:4173,http://127.0.0.1:4173,http://[::1]:4173}
     ports:
-      - "5000:8080"
+      - "5000:10000"
 
 volumes:
   obraflow_postgres_data:

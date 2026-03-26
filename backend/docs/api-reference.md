@@ -58,6 +58,11 @@ Create and update payload:
 }
 ```
 
+Behavior note:
+
+- `reportedAtUtc` must be sent in UTC with an explicit `Z` suffix
+- timestamps without timezone information, or with a non-UTC offset, are rejected with `400 Bad Request`
+
 ## Daily Reports
 
 Routes:

@@ -3,8 +3,8 @@ services:
     name: obraflow-api
     runtime: docker
     rootDir: backend
-    dockerContext: ./backend
-    dockerfilePath: ./backend/src/ObraFlow.Api/Dockerfile
+    dockerContext: .
+    dockerfilePath: Dockerfile
     healthCheckPath: /health
     envVars:
       - key: PORT
@@ -16,10 +16,10 @@ services:
       - key: ASPNETCORE_FORWARDEDHEADERS_ENABLED
         value: true
       - key: Database__ApplyMigrationsOnStartup
-        value: true
+        value: false
       - key: DemoMode__EnableWriteRateLimiting
         value: true
-      - key: ConnectionStrings__DefaultConnection
-        sync: false
       - key: Cors__AllowedOrigins
+        value: https://obraflow.adrianalcaraz.es,https://<project>.vercel.app
+      - key: ConnectionStrings__DefaultConnection
         sync: false

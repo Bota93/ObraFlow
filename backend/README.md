@@ -69,6 +69,12 @@ For environment-based local configuration, start from `backend/.env.example`.
 
 For Supabase + Render deployment guidance, see `../docs/deployment.md`.
 
+For the production-like Render target used by this repository:
+
+- Root Directory: `backend`
+- Dockerfile path: `Dockerfile`
+- health check: `/health`
+
 ## Testing
 
 The backend uses xUnit integration tests with `WebApplicationFactory`.

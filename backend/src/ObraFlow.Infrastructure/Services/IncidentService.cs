@@ -41,7 +41,7 @@ public class IncidentService : IIncidentService
             Title = dto.Title.Trim(),
             Description = dto.Description.Trim(),
             Status = dto.Status,
-            ReportedAtUtc = dto.ReportedAtUtc
+            ReportedAtUtc = dto.ReportedAtUtc.ToUniversalTime()
         };
 
         _dbContext.Incidents.Add(incident);
@@ -63,7 +63,7 @@ public class IncidentService : IIncidentService
         incident.Title = dto.Title.Trim();
         incident.Description = dto.Description.Trim();
         incident.Status = dto.Status;
-        incident.ReportedAtUtc = dto.ReportedAtUtc;
+        incident.ReportedAtUtc = dto.ReportedAtUtc.ToUniversalTime();
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
@@ -94,7 +94,7 @@ public class IncidentService : IIncidentService
             Title = incident.Title,
             Description = incident.Description,
             Status = incident.Status,
-            ReportedAtUtc = incident.ReportedAtUtc
+            ReportedAtUtc = DateTime.SpecifyKind(incident.ReportedAtUtc, DateTimeKind.Utc)
         };
     }
 }

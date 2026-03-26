@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
+using System.Text;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -57,6 +58,10 @@ public class IncidentsEndpointsTests
         created!.Title.Should().Be(payload.title);
         created.Description.Should().Be(payload.description);
         created.Status.Should().Be(IncidentStatus.Open);
+
+        var rawPayload = await response.Content.ReadAsStringAsync();
+        rawPayload.Should().Contain("\"reportedAtUtc\":\"");
+        rawPayload.Should().Contain("Z\"");
     }
 
     [Fact]
@@ -93,6 +98,31 @@ public class IncidentsEndpointsTests
     }
 
     [Fact]
+    public async Task PostIncident_ShouldReturnBadRequest_WhenReportedAtUtcDoesNotUseExplicitUtc()
+    {
+        using var factory = new CustomWebApplicationFactory();
+        using var client = CreateClient(factory);
+
+        using var content = CreateJsonContent(
+            """
+            {
+              "title": "Incident without UTC suffix",
+              "description": "Timestamp is missing the explicit UTC suffix.",
+              "status": 1,
+              "reportedAtUtc": "2026-03-21T09:00:00"
+            }
+            """);
+
+        var response = await client.PostAsync("/incidents", content);
+
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+        var problem = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+        problem.Should().NotBeNull();
+        problem!.Errors.Should().ContainKey("ReportedAtUtc");
+    }
+
+    [Fact]
     public async Task PutIncident_ShouldUpdateIncident()
     {
         using var factory = new CustomWebApplicationFactory();
@@ -117,6 +147,33 @@ public class IncidentsEndpointsTests
         updated!.Title.Should().Be(payload.title);
         updated.Description.Should().Be(payload.description);
         updated.Status.Should().Be(IncidentStatus.InProgress);
+    }
+
+    [Fact]
+    public async Task PutIncident_ShouldReturnBadRequest_WhenReportedAtUtcUsesNonUtcOffset()
+    {
+        using var factory = new CustomWebApplicationFactory();
+        using var client = CreateClient(factory);
+
+        var created = await CreateIncidentAsync(client);
+
+        using var content = CreateJsonContent(
+            $$"""
+            {
+              "title": "Updated incident with offset",
+              "description": "Offset timestamps must be normalized client-side before sending.",
+              "status": 2,
+              "reportedAtUtc": "2026-03-21T11:00:00+02:00"
+            }
+            """);
+
+        var response = await client.PutAsync($"/incidents/{created.Id}", content);
+
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+        var problem = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+        problem.Should().NotBeNull();
+        problem!.Errors.Should().ContainKey("ReportedAtUtc");
     }
 
     [Fact]
@@ -152,5 +209,10 @@ public class IncidentsEndpointsTests
         incident.Should().NotBeNull();
 
         return incident!;
+    }
+
+    private static StringContent CreateJsonContent(string payload)
+    {
+        return new StringContent(payload, Encoding.UTF8, "application/json");
     }
 }

@@ -31,7 +31,6 @@ builder.Services.AddCors(options =>
         {
             policy
                 .WithOrigins(allowedOrigins)
-                .SetIsOriginAllowedToAllowWildcardSubdomains()
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         }

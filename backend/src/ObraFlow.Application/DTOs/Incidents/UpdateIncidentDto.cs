@@ -25,6 +25,14 @@ public class UpdateIncidentDto : IValidatableObject
         if (ReportedAtUtc == default)
         {
             yield return new ValidationResult("The ReportedAtUtc field is required.", [nameof(ReportedAtUtc)]);
+            yield break;
+        }
+
+        if (ReportedAtUtc.Kind != DateTimeKind.Utc)
+        {
+            yield return new ValidationResult(
+                "The ReportedAtUtc field must be sent in UTC using an explicit 'Z' suffix.",
+                [nameof(ReportedAtUtc)]);
         }
     }
 }
