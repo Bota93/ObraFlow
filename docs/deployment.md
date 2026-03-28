@@ -60,6 +60,12 @@ Do not put any Supabase database credentials in:
 
 The repository root includes `render.yaml` for the API service.
 
+Current public endpoints:
+
+- App: `https://obraflow.adrianalcaraz.es`
+- API: `https://api-obraflow.adrianalcaraz.es`
+- Swagger: `https://api-obraflow.adrianalcaraz.es/swagger`
+
 Important settings already prepared there:
 
 - Root Directory: `backend`
@@ -84,6 +90,7 @@ Keep `Database__ApplyMigrationsOnStartup=false` as the steady-state default. Ena
 The public backend target is:
 
 - `https://api-obraflow.adrianalcaraz.es`
+- `https://api-obraflow.adrianalcaraz.es/swagger`
 
 ## Vercel
 

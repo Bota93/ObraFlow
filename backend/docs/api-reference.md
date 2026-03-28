@@ -2,6 +2,11 @@
 
 ## Base URLs
 
+Public demo:
+
+- `https://api-obraflow.adrianalcaraz.es`
+- `https://api-obraflow.adrianalcaraz.es/swagger`
+
 Local development:
 
 - `http://localhost:5250`

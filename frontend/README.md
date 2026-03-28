@@ -8,6 +8,12 @@ The frontend is a React application that consumes the backend API for the main p
 - daily reports
 - incidents
 
+## Live Demo
+
+- App: `https://obraflow.adrianalcaraz.es`
+- API: `https://api-obraflow.adrianalcaraz.es`
+- Swagger: `https://api-obraflow.adrianalcaraz.es/swagger`
+
 ## Status
 
 The frontend application is implemented with Vite, React, and TypeScript.

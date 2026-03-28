@@ -8,6 +8,11 @@ It replaces fragmented workflows such as paper-based reports, informal incident 
 
 <img src="./docs/screenshots/dashboard.png" alt="ObraFlow dashboard with operational metrics and site visibility" width="900" />
 
+## Live Demo
+
+- App: `https://obraflow.adrianalcaraz.es`
+- API: `https://api-obraflow.adrianalcaraz.es`
+- Swagger: `https://api-obraflow.adrianalcaraz.es/swagger`
 
 ## Current Product Scope
 
@@ -142,6 +147,7 @@ Deployment target:
 
 - frontend public URL: `https://obraflow.adrianalcaraz.es`
 - backend public URL: `https://api-obraflow.adrianalcaraz.es`
+- swagger URL: `https://api-obraflow.adrianalcaraz.es/swagger`
 
 ## Public Demo Behavior
 

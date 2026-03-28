@@ -10,6 +10,14 @@ To work on ObraFlow locally, install:
 - Docker Desktop or another Docker runtime with Compose support
 - PostgreSQL, if you want to run the database outside Docker
 
+## Public Demo
+
+Live environment URLs:
+
+- App: `https://obraflow.adrianalcaraz.es`
+- API: `https://api-obraflow.adrianalcaraz.es`
+- Swagger UI: `https://api-obraflow.adrianalcaraz.es/swagger`
+
 ## Option 1: Run With Docker Compose
 
 The simplest way to boot the full local stack is:

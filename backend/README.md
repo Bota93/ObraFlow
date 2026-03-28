@@ -42,6 +42,12 @@ Responsibilities stay separated:
 
 ## Runtime
 
+Public demo URLs:
+
+- App: `https://obraflow.adrianalcaraz.es`
+- API: `https://api-obraflow.adrianalcaraz.es`
+- Swagger: `https://api-obraflow.adrianalcaraz.es/swagger`
+
 From `backend/`, run with Docker:
 
 ```bash
