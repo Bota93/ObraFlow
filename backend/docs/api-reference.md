@@ -17,6 +17,10 @@ Docker Compose:
 - `http://localhost:5000`
 - `http://localhost:5000/swagger`
 
+Operational endpoint:
+
+- `GET /health`
+
 ## Implemented Resources
 
 - `Dashboard`
@@ -41,6 +45,17 @@ Response fields:
 - `hoursWorkedToday`
 - `hoursWorkedLast7Days`
 
+## Health
+
+Routes:
+
+- `GET /health`
+
+Behavior:
+
+- returns `200 OK` with `{"status":"ok"}` when the API can reach the database
+- returns `503 Service Unavailable` when database connectivity fails
+
 ## Workers
 
 Routes:
@@ -62,11 +77,6 @@ Create and update payload:
   "isActive": true
 }
 ```
-
-Behavior note:
-
-- `reportedAtUtc` must be sent in UTC with an explicit `Z` suffix
-- timestamps without timezone information, or with a non-UTC offset, are rejected with `400 Bad Request`
 
 ## Daily Reports
 
@@ -120,6 +130,11 @@ Create and update payload:
 - `2` = `InProgress`
 - `3` = `Resolved`
 
+Behavior note:
+
+- `reportedAtUtc` must be sent in UTC with an explicit `Z` suffix
+- timestamps without timezone information, or with a non-UTC offset, are rejected with `400 Bad Request`
+
 ## Common Status Codes
 
 - `200 OK` for successful reads and updates
@@ -127,7 +142,15 @@ Create and update payload:
 - `204 No Content` for successful deletes
 - `400 Bad Request` for validation failures
 - `404 Not Found` when the resource does not exist
+- `500 Internal Server Error` for unexpected server-side failures
 - `429 Too Many Requests` when demo write protection is enabled and the create limit is exceeded
+
+## Unhandled Errors
+
+For unexpected exceptions caught by the global middleware, the API returns JSON with:
+
+- `message`
+- `traceId`
 
 ## Demo Protection Notes
 

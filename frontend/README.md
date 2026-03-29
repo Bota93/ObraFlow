@@ -21,10 +21,12 @@ The frontend application is implemented with Vite, React, and TypeScript.
 The current workspace already includes:
 
 - application layouts and router
+- persistent demo notice in the application shell
 - shared HTTP client and environment configuration
+- development API fallback from `http://localhost:5250` to `http://localhost:5000` when `VITE_API_BASE_URL` is not set
 - dashboard data integration
 - workers, daily reports, and incidents data views
-- create worker route and validated form flow
+- create worker route at `/workers/new` with React Hook Form and Zod validation
 
 The next goal is to evolve this MVP without breaking the documented architecture.
 

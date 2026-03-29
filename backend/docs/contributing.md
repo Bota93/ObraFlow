@@ -94,7 +94,7 @@ For a new contributor:
 Current recommended first issues:
 
 - materials module
-- centralized exception middleware
+- richer error response mapping and problem details
 - application and infrastructure test coverage
 
 ## Documentation Rule

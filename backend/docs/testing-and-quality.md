@@ -26,6 +26,8 @@ Current coverage includes:
 
 The tests exercise the real API surface. They do not mock the HTTP layer.
 
+Operational endpoints such as `/health` and `/swagger` are currently verified manually rather than through the integration suite.
+
 ## Verification Priorities
 
 Before merging backend changes, the most important checks are:
@@ -42,5 +44,5 @@ Still missing:
 
 - application-layer tests
 - infrastructure-focused persistence tests against PostgreSQL behavior
-- centralized exception handling
+- automated coverage for operational endpoints and broader error-path verification
 - broader CI quality gates

@@ -52,10 +52,12 @@ Avoid:
 
 ## Validation
 
-Validation is currently handled with DTO data annotations and `IValidatableObject` where needed. The preferred next step is:
+Validation is currently handled with DTO data annotations and `IValidatableObject` where needed. Unhandled exceptions already flow through the global exception middleware in the API project.
+
+The preferred next step is:
 
 - validate incoming requests consistently
-- centralize error formatting
+- standardize error formatting across validation, domain, and application failures
 - avoid scattering validation rules across controllers
 
 ## Swagger

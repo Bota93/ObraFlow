@@ -23,6 +23,8 @@ Implemented today:
 - daily reports list
 - incidents list
 - ASP.NET Core backend with PostgreSQL persistence
+- health endpoint with database connectivity check
+- global exception middleware for unhandled API failures
 - React frontend consuming the backend API
 
 ## Stack
@@ -51,6 +53,7 @@ Implemented today:
 - Docker Compose
 - PostgreSQL 16
 - Swagger / OpenAPI
+- `GET /health`
 
 ## Architecture
 
@@ -82,6 +85,8 @@ Current coverage includes:
 - demo database reset behavior
 
 These tests exercise the real API surface without mocking the HTTP layer.
+
+Operational endpoints such as `/health` and `/swagger` are currently verified outside the automated suite.
 
 ## How To Run Locally
 

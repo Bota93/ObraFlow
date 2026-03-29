@@ -43,12 +43,15 @@ For the remaining module and any expansions, the target is:
 
 ## Phase 3: Validation And Error Handling
 
+Current baseline already in place:
+
+- middleware-based fallback handling for unhandled exceptions
+
 Add:
 
 - request validation
 - domain or application-level error mapping
-- middleware-based exception handling
-- predictable API error responses
+- predictable API error responses and shared error payload conventions
 
 ## Phase 4: Operational Quality
 
@@ -56,7 +59,7 @@ Add:
 
 - broader seed data strategy if more modules need it
 - logging
-- health checks
+- broader readiness and operational monitoring beyond the current `/health` endpoint
 - broader automated coverage across layers
 - API examples in documentation
 

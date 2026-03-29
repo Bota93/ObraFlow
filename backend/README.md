@@ -16,13 +16,17 @@ Also implemented:
 - PostgreSQL persistence with EF Core migrations
 - seeded demo data for workers, daily reports, and incidents
 - integration tests with isolated HTTP-level verification
+- global exception middleware for unhandled failures
+- `GET /health` with database connectivity check
+- configurable Swagger availability through `Swagger:Enabled`
 - demo write protection and demo reset support
 
 Planned next steps:
 
 - materials through Application and API
-- centralized exception handling
 - broader test layers beyond the current integration suite
+- richer domain and application error mapping
+- authentication and authorization after the MVP stabilizes
 
 ## Architecture
 
@@ -46,6 +50,7 @@ Public demo URLs:
 
 - App: `https://obraflow.adrianalcaraz.es`
 - API: `https://api-obraflow.adrianalcaraz.es`
+- Health: `https://api-obraflow.adrianalcaraz.es/health`
 - Swagger: `https://api-obraflow.adrianalcaraz.es/swagger`
 
 From `backend/`, run with Docker:
@@ -57,6 +62,7 @@ docker compose up --build
 URLs:
 
 - API: `http://localhost:5000`
+- Health: `http://localhost:5000/health`
 - Swagger: `http://localhost:5000/swagger`
 
 Run locally against PostgreSQL:
@@ -69,6 +75,7 @@ URLs:
 
 - API: `http://localhost:5250`
 - HTTPS API: `https://localhost:7129`
+- Health: `http://localhost:5250/health`
 - Swagger: `http://localhost:5250/swagger`
 
 For environment-based local configuration, start from `backend/.env.example`.

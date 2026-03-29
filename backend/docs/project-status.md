@@ -33,8 +33,11 @@ ObraFlow backend is currently a functional MVP with real persistence, HTTP endpo
 
 - controllers for workers, daily reports, incidents, and dashboard
 - Swagger/OpenAPI
+- configurable Swagger activation through `Swagger:Enabled`
 - runtime configuration
 - CORS configuration for frontend development
+- global exception handling middleware
+- `GET /health` endpoint with database connectivity check
 - demo write rate limiting for protected create endpoints
 - `reset-demo` execution path
 
@@ -54,7 +57,7 @@ Integration coverage exists for:
 Still not implemented:
 
 - materials application and API slice
-- centralized exception middleware
+- richer domain and application error mapping beyond the current 500 fallback middleware
 - broader application and infrastructure test layers
 - authentication and authorization
 
@@ -63,7 +66,7 @@ Still not implemented:
 The next steps that fit the current architecture best are:
 
 1. implement materials end-to-end
-2. add centralized error handling
+2. standardize domain and application error responses beyond the current global exception fallback
 3. expand test coverage beyond the integration suite
-4. improve operational readiness with health and logging concerns
+4. improve operational readiness with logging and broader readiness coverage beyond the current `/health` endpoint
 5. add security concerns after the MVP modules remain stable

@@ -12,6 +12,7 @@ It currently supports:
 - workers list and create flow
 - daily reports list
 - incidents list
+- a persistent demo notice in the authenticated shell
 
 ## Structure
 
@@ -42,6 +43,17 @@ TanStack Query is used for server state:
 - invalidation for write flows where needed
 
 The shared Axios client lives in `shared/api`, and each feature keeps its own API calls close to the related UI code.
+
+When `VITE_API_BASE_URL` is not set in development, the frontend tries `http://localhost:5250` first and automatically falls back to `http://localhost:5000` if the first backend target is unavailable.
+
+## Forms
+
+Current write flows use:
+
+- React Hook Form for form state
+- Zod for client-side validation close to the feature
+
+The current implemented write flow is the worker creation route at `/workers/new`.
 
 ## Current Direction
 
