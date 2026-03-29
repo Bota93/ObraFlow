@@ -19,6 +19,7 @@ var forwardedHeadersEnabled = string.Equals(
     "true",
     StringComparison.OrdinalIgnoreCase);
 var allowedOrigins = GetAllowedOrigins(builder.Configuration);
+var swaggerEnabled = IsSwaggerEnabled(builder.Configuration, builder.Environment);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -42,7 +43,7 @@ if (forwardedHeadersEnabled)
     builder.Services.Configure<ForwardedHeadersOptions>(options =>
     {
         options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-        options.KnownNetworks.Clear();
+        options.KnownIPNetworks.Clear();
         options.KnownProxies.Clear();
     });
 }
@@ -122,7 +123,7 @@ if (demoResetRequested)
     return;
 }
 
-if (app.Environment.IsDevelopment())
+if (swaggerEnabled)
 {
     app.UseSwagger();
     app.UseSwaggerUI();
@@ -194,6 +195,11 @@ static async Task<IResult> CheckHealthAsync(AppDbContext dbContext, Cancellation
             statusCode: StatusCodes.Status503ServiceUnavailable,
             title: "Database unavailable");
     }
+}
+
+static bool IsSwaggerEnabled(IConfiguration configuration, IWebHostEnvironment environment)
+{
+    return configuration.GetValue<bool?>("Swagger:Enabled") ?? environment.IsDevelopment();
 }
 
 public partial class Program;

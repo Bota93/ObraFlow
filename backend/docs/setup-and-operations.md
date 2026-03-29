@@ -88,6 +88,7 @@ Useful environment variables for local and hosted environments:
 - `ConnectionStrings__DefaultConnection`
 - `Cors__AllowedOrigins`
 - `Database__ApplyMigrationsOnStartup`
+- `Swagger__Enabled`
 - `ASPNETCORE_FORWARDEDHEADERS_ENABLED`
 
 ## Build
@@ -110,7 +111,12 @@ The test suite uses `CustomWebApplicationFactory` and an in-memory SQLite databa
 
 ## Swagger
 
-Swagger is enabled only in the Development environment. That behavior is configured in `src/ObraFlow.Api/Program.cs`.
+Swagger is controlled through configuration:
+
+- Development defaults to enabled
+- other environments stay disabled unless `Swagger__Enabled=true`
+
+That behavior is configured in `src/ObraFlow.Api/Program.cs`.
 
 ## Health Endpoint
 

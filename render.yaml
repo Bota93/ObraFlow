@@ -17,6 +17,8 @@ services:
         value: true
       - key: Database__ApplyMigrationsOnStartup
         value: false
+      - key: Swagger__Enabled
+        value: true
       - key: DemoMode__EnableWriteRateLimiting
         value: true
       - key: Cors__AllowedOrigins

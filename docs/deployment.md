@@ -71,6 +71,7 @@ Important settings already prepared there:
 - Root Directory: `backend`
 - Dockerfile path: `Dockerfile`
 - health check on `GET /health`
+- Swagger enabled through `Swagger__Enabled=true`
 - forwarded headers enabled for reverse-proxy HTTPS handling
 - demo write rate limiting enabled
 - startup migrations disabled by default
@@ -84,6 +85,8 @@ Set these environment variables in Render:
 - `Cors__AllowedOrigins`
   - prepared in `render.yaml` as `https://obraflow.adrianalcaraz.es,https://<project>.vercel.app`
   - replace `<project>` with the exact Vercel project subdomain before the final public deployment if needed
+- `Swagger__Enabled`
+  - set to `true` when you want the public Swagger UI available at `/swagger`
 
 Keep `Database__ApplyMigrationsOnStartup=false` as the steady-state default. Enable it only for the initial bootstrap if the database has not been migrated yet, then set it back to `false`.
 
