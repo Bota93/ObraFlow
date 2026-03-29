@@ -11,6 +11,10 @@ using ObraFlow.Infrastructure.Services;
 var builder = WebApplication.CreateBuilder(args);
 const string FrontendCorsPolicy = "FrontendDevelopment";
 const string DemoCreateWritesPolicy = "DemoCreateWrites";
+const string SwaggerRoutePrefix = "swagger";
+const string SwaggerRouteTemplate = "swagger/{documentName}/swagger.json";
+const string SwaggerJsonEndpoint = "/swagger/v1/swagger.json";
+const string SwaggerUiPath = "/swagger/index.html";
 var demoResetRequested = args.Any(arg =>
     string.Equals(arg, "reset-demo", StringComparison.OrdinalIgnoreCase) ||
     string.Equals(arg, "--reset-demo", StringComparison.OrdinalIgnoreCase));
@@ -125,8 +129,25 @@ if (demoResetRequested)
 
 if (swaggerEnabled)
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwagger(options =>
+    {
+        options.RouteTemplate = SwaggerRouteTemplate;
+    });
+    app.Use(async (context, next) =>
+    {
+        if (context.Request.Path.Equals($"/{SwaggerRoutePrefix}", StringComparison.OrdinalIgnoreCase))
+        {
+            context.Response.Redirect(SwaggerUiPath);
+            return;
+        }
+
+        await next();
+    });
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint(SwaggerJsonEndpoint, "ObraFlow.Api v1");
+        options.RoutePrefix = SwaggerRoutePrefix;
+    });
 }
 
 if (forwardedHeadersEnabled)
