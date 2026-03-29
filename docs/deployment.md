@@ -70,7 +70,8 @@ Important settings already prepared there:
 
 - Root Directory: `backend`
 - Dockerfile path: `Dockerfile`
-- health check on `GET /health`
+- liveness health check on `GET /live`
+- readiness endpoint on `GET /health`
 - Swagger enabled through `Swagger__Enabled=true`
 - forwarded headers enabled for reverse-proxy HTTPS handling
 - demo write rate limiting enabled

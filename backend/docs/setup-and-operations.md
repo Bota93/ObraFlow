@@ -118,9 +118,12 @@ Swagger is controlled through configuration:
 
 That behavior is configured in `src/ObraFlow.Api/Program.cs`.
 
-## Health Endpoint
+## Health Endpoints
 
-The API exposes `GET /health` and returns `200 OK` when the application and database are reachable.
+The API exposes:
+
+- `GET /live` for liveness checks without touching the database
+- `GET /health` for readiness checks with real database connectivity verification
 
 ## Notes About The Current Runtime
 

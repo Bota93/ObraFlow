@@ -141,7 +141,8 @@ app.UseCors(FrontendCorsPolicy);
 app.UseRateLimiter();
 
 app.UseAuthorization();
-app.MapGet("/health", CheckHealthAsync);
+app.MapGet("/live", CheckLiveness);
+app.MapGet("/health", CheckReadinessAsync);
 app.MapControllers();
 
 app.Run();
@@ -177,23 +178,28 @@ static async Task ApplyMigrationsAsync(IServiceProvider services)
     await dbContext.Database.MigrateAsync();
 }
 
-static async Task<IResult> CheckHealthAsync(AppDbContext dbContext, CancellationToken cancellationToken)
+static IResult CheckLiveness()
+{
+    return Results.Ok(new { status = "alive" });
+}
+
+static async Task<IResult> CheckReadinessAsync(AppDbContext dbContext, CancellationToken cancellationToken)
 {
     try
     {
-        var canConnect = await dbContext.Database.CanConnectAsync(cancellationToken);
+        var databaseReachable = await dbContext.Database.CanConnectAsync(cancellationToken);
 
-        return canConnect
-            ? Results.Ok(new { status = "ok" })
-            : Results.Problem(
-                statusCode: StatusCodes.Status503ServiceUnavailable,
-                title: "Database unavailable");
+        return databaseReachable
+            ? Results.Ok(new { status = "healthy", database = "reachable" })
+            : Results.Json(
+                new { status = "unhealthy", database = "unreachable" },
+                statusCode: StatusCodes.Status503ServiceUnavailable);
     }
     catch
     {
-        return Results.Problem(
-            statusCode: StatusCodes.Status503ServiceUnavailable,
-            title: "Database unavailable");
+        return Results.Json(
+            new { status = "unhealthy", database = "unreachable" },
+            statusCode: StatusCodes.Status503ServiceUnavailable);
     }
 }
 

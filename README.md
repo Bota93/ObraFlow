@@ -23,7 +23,7 @@ Implemented today:
 - daily reports list
 - incidents list
 - ASP.NET Core backend with PostgreSQL persistence
-- health endpoint with database connectivity check
+- liveness and readiness endpoints for hosted health checks
 - global exception middleware for unhandled API failures
 - React frontend consuming the backend API
 
@@ -53,6 +53,7 @@ Implemented today:
 - Docker Compose
 - PostgreSQL 16
 - Swagger / OpenAPI
+- `GET /live`
 - `GET /health`
 
 ## Architecture

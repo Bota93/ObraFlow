@@ -19,6 +19,7 @@ Docker Compose:
 
 Operational endpoint:
 
+- `GET /live`
 - `GET /health`
 
 ## Implemented Resources
@@ -45,6 +46,17 @@ Response fields:
 - `hoursWorkedToday`
 - `hoursWorkedLast7Days`
 
+## Liveness
+
+Routes:
+
+- `GET /live`
+
+Behavior:
+
+- returns `200 OK` with `{"status":"alive"}`
+- does not depend on database connectivity
+
 ## Health
 
 Routes:
@@ -53,8 +65,8 @@ Routes:
 
 Behavior:
 
-- returns `200 OK` with `{"status":"ok"}` when the API can reach the database
-- returns `503 Service Unavailable` when database connectivity fails
+- returns `200 OK` with `{"status":"healthy","database":"reachable"}` when the API can reach the database
+- returns `503 Service Unavailable` with `{"status":"unhealthy","database":"unreachable"}` when database connectivity fails
 
 ## Workers
 

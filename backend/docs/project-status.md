@@ -37,6 +37,7 @@ ObraFlow backend is currently a functional MVP with real persistence, HTTP endpo
 - runtime configuration
 - CORS configuration for frontend development
 - global exception handling middleware
+- `GET /live` endpoint for liveness checks
 - `GET /health` endpoint with database connectivity check
 - demo write rate limiting for protected create endpoints
 - `reset-demo` execution path

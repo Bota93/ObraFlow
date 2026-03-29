@@ -17,7 +17,8 @@ Also implemented:
 - seeded demo data for workers, daily reports, and incidents
 - integration tests with isolated HTTP-level verification
 - global exception middleware for unhandled failures
-- `GET /health` with database connectivity check
+- `GET /live` for liveness checks
+- `GET /health` for database-backed readiness checks
 - configurable Swagger availability through `Swagger:Enabled`
 - demo write protection and demo reset support
 
@@ -86,7 +87,8 @@ For the production-like Render target used by this repository:
 
 - Root Directory: `backend`
 - Dockerfile path: `Dockerfile`
-- health check: `/health`
+- liveness health check: `/live`
+- readiness endpoint: `/health`
 
 ## Testing
 
