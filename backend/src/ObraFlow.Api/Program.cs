@@ -127,6 +127,11 @@ if (demoResetRequested)
     return;
 }
 
+if (forwardedHeadersEnabled)
+{
+    app.UseForwardedHeaders();
+}
+
 if (swaggerEnabled)
 {
     app.UseSwagger(options =>
@@ -148,11 +153,6 @@ if (swaggerEnabled)
         options.SwaggerEndpoint(SwaggerJsonEndpoint, "ObraFlow.Api v1");
         options.RoutePrefix = SwaggerRoutePrefix;
     });
-}
-
-if (forwardedHeadersEnabled)
-{
-    app.UseForwardedHeaders();
 }
 
 app.UseHttpsRedirection();
